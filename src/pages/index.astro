@@ -1,38 +1,103 @@
 ---
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_DESCRIPTION } from '../consts';
 ---
 
-<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<h1>🧑‍🚀 Hello, Astronaut!</h1>
-	<p>
-		Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template.
-		This template serves as a lightweight, minimally-styled starting point for anyone looking to build
-		a personal website, blog, or portfolio with Astro.
-	</p>
-	<p>
-		This template comes with a few integrations already configured in your
-		<code>astro.config.mjs</code> file. You can customize your setup with
-		<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-		React, or Vue to your project.
-	</p>
-	<p>Here are a few ideas on how to get started with the template:</p>
-	<ul>
-		<li>Edit this page in <code>src/pages/index.astro</code></li>
-		<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-		<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-		<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-		<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-	</ul>
-	<p>
-		Have fun! If you get stuck, remember to
-		<a href="https://docs.astro.build/">read the docs</a>
-		or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-	</p>
-	<p>
-		Looking for a blog template with a bit more personality? Check out
-		<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-		by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-	</p>
+<BaseLayout title="Edgar Reyes-Rivera | Computer Engineering & Computer Science" description={SITE_DESCRIPTION}>
+    <div class="hero">
+        <div class="intro-text">
+            <h1>Edgar Reyes-Rivera</h1>
+            <p class="tagline">
+                Dual Major Student in Computer Engineering & Computer Science
+            </p>
+            <p class="bio">
+                I'm passionate about building robust, high-performance systems from the 
+                ground up. I thrive on the challenges found at the intersection of 
+                hardware and software.
+            </p>
+        </div>
+
+        <nav class="cta-nav">
+            <a href="/projects" class="cta-button">
+                View My Work
+            </a>
+            <a href="/resume" class="cta-button">
+                My Resume
+            </a>
+            <a href="/about" class="cta-button">
+                More About Me
+            </a>
+        </nav>
+    </div>
 </BaseLayout>
+
+<style>
+    /* ... (hero, intro-text, tagline, cta-nav styles are unchanged) ... */
+    .hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        text-align: center;
+        padding: 2rem 0;
+    }
+
+    .intro-text h1 {
+        font-size: 3.5rem;
+        margin: 0;
+        color: var(--font-color);
+    }
+
+    .tagline {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: var(--accent-color);
+        margin: 0.5rem 0 1.5rem 0;
+    }
+
+    .bio {
+        font-size: 1.15rem;
+        max-width: 600px;
+        /* This change centers the block horizontally */
+        margin: 0 auto 3rem; 
+        opacity: 0.9;
+    }
+
+    .cta-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+
+    .cta-button {
+        padding: 0.8rem 1.8rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        background-color: transparent;
+        color: var(--accent-color);
+        border: 2px solid var(--accent-color);
+        transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
+    }
+    
+    .cta-button:hover {
+        background-color: var(--accent-color);
+        color: var(--page-background); /* This ensures contrast */
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(var(--shadow-color), 0.25);
+    }
+
+    /* ... (media query is unchanged) ... */
+    @media (max-width: 720px) {
+        .intro-text h1 {
+            font-size: 2.5rem;
+        }
+        .tagline {
+            font-size: 1.2rem;
+        }
+    }
+</style>
