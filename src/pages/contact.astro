@@ -1,0 +1,75 @@
+---
+// src/pages/contact.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="Contact Me | Edgar Reyes-Rivera"
+	description="Get in touch with Edgar Reyes-Rivera via email, LinkedIn, or GitHub."
+>
+	<div class="contact-wrapper">
+		<h1>Contact Me</h1>
+		<p>
+			I'm always open to discussing new projects, creative ideas, or 
+            opportunities to be part of your vision. Feel free to reach out.
+		</p>
+
+		<div class="contact-links">
+			<a href="mailto:edgar@reyesrivera.dev" class="contact-button email">
+				Email: edgar@reyesrivera.dev
+			</a>
+			<a href="https://www.linkedin.com/in/edgar-reyes-rivera/" target="_blank" rel="noopener noreferrer" class="contact-button linkedin">
+				LinkedIn: edgar-reyes-rivera
+			</a>
+            <a href="https://github.com/EdgarReyesRivera" target="_blank" rel="noopener noreferrer" class="contact-button github">
+                GitHub: EdgarReyesRivera
+            </a>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.contact-wrapper {
+		max-width: 600px;
+		margin: auto;
+		text-align: center;
+	}
+	h1 {
+		margin-bottom: 1rem;
+	}
+	p {
+		font-size: 1.15rem;
+		margin-bottom: 2.5rem;
+	}
+	.contact-links {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+	.contact-button {
+		display: block;
+		padding: 1rem 1.5rem;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: bold;
+		font-size: 1.1rem;
+		box-shadow: 0 2px 4px rgba(var(--shadow-color), 0.1);
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+	}
+	.contact-button:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 5px 15px rgba(var(--shadow-color), 0.25);
+	}
+	.contact-button.email {
+		background-color: var(--accent-color);
+		color: var(--ghost-white);
+	}
+	.contact-button.github {
+		background-color: #333;
+		color: white;
+	}
+	.contact-button.linkedin {
+		background-color: #0077b5;
+		color: white;
+	}
+</style>
