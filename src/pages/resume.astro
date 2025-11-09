@@ -1,0 +1,66 @@
+---
+// src/pages/resume.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="Resume | Edgar Reyes-Rivera"
+	description="View and download the resume for Edgar Reyes-Rivera."
+>
+	<div class="resume-wrapper">
+		<h1>My Resume</h1>
+		<p>
+			Here is my most recent resume. You can view it below or 
+            click the button to download a copy.
+		</p>
+		
+		<a 
+            href="/resume.pdf" 
+            download="EdgarReyesRivera_Resume.pdf" 
+            class="download-button"
+        >
+			Download Resume (PDF)
+		</a>
+
+		<div class="pdf-embed">
+			<iframe 
+                src="/resume.pdf" 
+                title="Edgar Reyes-Rivera's Resume"
+                width="100%"
+                height="800px"
+            >
+            </iframe>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.resume-wrapper {
+		text-align: center;
+	}
+	.download-button {
+		display: inline-block;
+		padding: 0.8rem 1.5rem;
+		margin-bottom: 2rem;
+		background-color: var(--accent-dark);
+		color: var(--ghost-white);
+		font-weight: bold;
+		text-decoration: none;
+		border-radius: 8px;
+		transition: background-color 0.2s ease;
+	}
+	.download-button:hover {
+		background-color: var(--tekhelet);
+	}
+	.pdf-embed {
+		width: 100%;
+		max-width: 800px; /* Standard doc width */
+		margin: auto;
+		border-radius: 8px;
+		box-shadow: 0 5px 15px rgba(var(--shadow-color), 0.25);
+		overflow: hidden; /* To apply border-radius to iframe */
+	}
+	.pdf-embed iframe {
+		border: none;
+	}
+</style>
