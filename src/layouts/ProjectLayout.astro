@@ -6,7 +6,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 import { Image } from 'astro:assets';
 
 type Props = CollectionEntry<'projects'>['data'];
-const { title, description, pubDate, status, heroImage, tags } = Astro.props;
+const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} image={heroImage}>
@@ -28,44 +28,59 @@ const { title, description, pubDate, status, heroImage, tags } = Astro.props;
 			<p class="description">{description}</p>
 		</header>
 
-		<div class="content-wrapper">
-			<div class="prose">
-				<slot /> </div>
+		<aside class="sidebar">
+			<div class="metadata-box">
+				<h3>Project Details</h3>
+				<p>
+					<strong>Status:</strong>
+					<span class={`status-badge status-${status.toLowerCase()}`}>
+						{status}
+					</span>
+				</p>
+                {
+					pubDate && (
+						<p>
+							<strong>Date:</strong>
+							<FormattedDate date={pubDate} />
+						</p>
+					)
+				}
+				{
+					tags && tags.length > 0 && (
+						<div class="tags-section">
+							<strong>Technologies:</strong>
+							<ul class="tags-list">
+								{tags.map((tag) => (
+									<li class="tag">{tag}</li>
+								))}
+							</ul>
+						</div>
+					)
+				}
+                {
+                    githubUrl && (
+                        <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="github-link">
+                            View on GitHub
+                        </a>
+                    )
+                }
+			</div>
+		</aside>
 
-			<aside class="sidebar">
-				<div class="metadata-box">
-					<h3>Project Details</h3>
-					<p>
-						<strong>Status:</strong>
-						<span class={`status-badge status-${status.toLowerCase()}`}>
-							{status}
-						</span>
-					</p>
-					<p>
-						<strong>Date:</strong>
-						<FormattedDate date={pubDate} />
-					</p>
-					{
-						tags && tags.length > 0 && (
-							<div class="tags-section">
-								<strong>Technologies:</strong>
-								<ul class="tags-list">
-									{tags.map((tag) => (
-										<li class="tag">{tag}</li>
-									))}
-								</ul>
-							</div>
-						)
-					}
-				</div>
-				</aside>
+        <div class="prose">
+			<slot />
 		</div>
 	</article>
 </BaseLayout>
 
 <style>
-	.project-detail {
+    :global(main) {
+		width: auto;
 		max-width: 1100px;
+		margin: 0 auto;
+	}
+
+	.project-detail {
 		margin: auto;
 	}
 	.hero-image {
@@ -75,7 +90,7 @@ const { title, description, pubDate, status, heroImage, tags } = Astro.props;
 		object-fit: cover;
 		border-radius: 12px;
 		margin-bottom: 2rem;
-		box-shadow: var(--box-shadow);
+		box-shadow: 0 5px 15px rgba(var(--shadow-color), 0.25);
 	}
 	.project-header {
 		text-align: center;
@@ -89,35 +104,14 @@ const { title, description, pubDate, status, heroImage, tags } = Astro.props;
 		font-size: 1.25rem;
 		color: var(--font-color);
 		opacity: 0.8;
-		max-width: 720px;
 		margin: auto;
-	}
-
-	.content-wrapper {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 3rem;
-	}
-
-	/* Sidebar layout for larger screens */
-	@media (min-width: 900px) {
-		.content-wrapper {
-			/* 3fr for content, 1fr for sidebar */
-			grid-template-columns: 3fr 1fr;
-		}
-		.prose {
-			order: 1; /* Content first */
-		}
-		.sidebar {
-			order: 2; /* Sidebar second */
-		}
 	}
 
 	/* Main content styles */
 	.prose {
 		color: rgb(var(--gray-dark));
 	}
-	/* Apply styles to the Markdown content rendered in <slot /> */
+
 	.prose :global(h2) {
 		font-size: 2rem;
 		margin-top: 3rem;
@@ -140,12 +134,37 @@ const { title, description, pubDate, status, heroImage, tags } = Astro.props;
 		border-radius: 8px;
 		box-shadow: 0 4px 12px rgba(var(--shadow-color), 0.15);
 	}
+    .prose :global(ul),
+	.prose :global(ol) {
+		padding-left: 2em;
+		margin-bottom: 1.5em;
+		font-size: 1.1rem;
+		line-height: 1.8;
+	}
+	.prose :global(li) {
+		margin-bottom: 0.75em;
+	}
+	.prose :global(li > p) {
+		margin-bottom: 0.75em;
+	}
+	.prose :global(strong) {
+		color: var(--accent-dark);
+		font-weight: 700;
+	}
+	.prose :global(blockquote) {
+		margin: 1.5em 0;
+		padding: 0.5em 0 0.5em 20px;
+		font-size: 1.2em;
+		opacity: 0.9;
+	}
+	.prose :global(pre) {
+		font-size: 1.1rem;
+	}
+
 
 	/* Sidebar styles */
 	.sidebar {
-		position: sticky;
-		top: 2rem; /* Sticks below header */
-		align-self: start; /* Aligns to top of grid cell */
+        margin-bottom: 3rem;
 	}
 	.metadata-box {
 		background: var(--code-bg);
@@ -195,4 +214,21 @@ const { title, description, pubDate, status, heroImage, tags } = Astro.props;
 		padding: 0.25rem 0.75rem;
 		border-radius: 6px;
 	}
+	.github-link {
+        display: block;
+        text-align: center;
+        padding: 0.75rem 1rem;
+        margin-top: 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1rem;
+        background-color: var(--accent-color);
+        color: var(--ghost-white);
+        transition: all 0.2s ease;
+    }
+    .github-link:hover {
+        background-color: var(--accent-dark);
+        transform: translateY(-2px);
+    }
 </style>
