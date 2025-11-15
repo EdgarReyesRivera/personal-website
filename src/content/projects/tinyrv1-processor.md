@@ -2,9 +2,10 @@
 title: 'TinyRISC-V RV1 Processor'
 description: 'A single-cycle 32-bit RISC-V processor (RV1) in Verilog, supporting a subset of the RISC-V ISA.'
 status: 'Completed'
-pubDate: 2024-05-01
-tags: ['Verilog', 'RISC-V', 'Python', 'Digital Circuit Design', 'Hardware']
-heroImage: '../../assets/preview.png' # TODO: Change this to a real project image
+pubDate: 2024-05-16
+tags: ['Verilog', 'RISC-V', 'Digital Circuit Design', 'Hardware', 'Python']
+# heroImage: '../../assets/preview.png' # TODO: Change this to a real project image
+githubUrl: 'https://github.com/EdgarReyesRivera/Tiny_RISC-V_FPGA'
 ---
 
 ## Motivation
@@ -43,4 +44,4 @@ All test programs executed successfully and produced the expected values in the 
 
 ## Future Work
 
-The current implementation only supports TinyRV1 instructions, I plan to revisit this program and implement the necessary instructions for TinyRV2. 
+The current implementation only supports TinyRV1 instructions, I plan to revisit this project and implement the necessary instructions for TinyRV2. As well as creating a block diagram to show the system architecture, to serve as the image for this project.
