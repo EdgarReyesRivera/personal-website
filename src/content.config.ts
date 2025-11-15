@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders';
 
 const blog = defineCollection({
 	// Load Markdown and MDX files in the `src/content/blog/` directory.
-	loader: glob({ base: 'src/pages/blog', pattern: '**/*.{md,mdx}' }),
+	loader: glob({ base: 'src/content/blog', pattern: '**/*.{md,mdx}' }),
 	// Type-check frontmatter using a schema
 	schema: ({ image }) =>
 		z.object({
@@ -18,7 +18,7 @@ const blog = defineCollection({
 
 const projects = defineCollection({
 	// Load Markdown and MDX files in the `src/content/projects/` directory.
-	loader: glob({ base: 'src/pages/projects', pattern: '**/*.{md,mdx}' }),
+	loader: glob({ base: 'src/content/projects', pattern: '**/*.{md,mdx}' }),
 	// Type-check frontmatter using a schema
 	schema: ({ image }) =>
 		z.object({
@@ -28,9 +28,11 @@ const projects = defineCollection({
 			// 'Completed', 'In-Progress', or 'Future'
 			status: z.enum(['Completed', 'In-Progress', 'Future']),
 			// Add a date for sorting, e.g., completion date
-			pubDate: z.coerce.date(),
+			pubDate: z.coerce.date().optional(),
 			// Optional tags for filtering
 			tags: z.array(z.string()).optional(),
+			// Optional github url 
+			githubUrl: z.string().url().optional(),
 			heroImage: image().optional(),
 		}),
 });
