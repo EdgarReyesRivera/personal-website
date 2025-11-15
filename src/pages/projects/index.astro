@@ -12,13 +12,9 @@ const allProjects = (await getCollection('projects')).sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-// This part (filtering the list) *will* work in SSG mode
-// for any params that are known at build time, but for dynamic
-// filtering, you might need client-side filtering too.
-// FOR NOW, we will assume this part is fine and just fix the button styling.
-const filteredProjects = statusFilter
-    ? allProjects.filter((project) => project.data.status === statusFilter)
-    : allProjects;
+// We no longer filter here on the server.
+// Let the client-side script handle showing/hiding.
+const filteredProjects = allProjects;
 
 const allStatuses = ['Completed', 'In-Progress', 'Future'];
 ---
@@ -52,7 +48,7 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
         <ul class="project-grid">
             {
                 filteredProjects.map((project) => (
-                    <li class="project-card">
+                    <li class="project-card" data-status={project.data.status}>
                         <a href={`/projects/${project.id}/`}>
                             {project.data.heroImage && (
                                 <Image
@@ -173,9 +169,24 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
     const urlParams = new URLSearchParams(window.location.search);
     const statusFilter = urlParams.get('status');
 
-    // Find all the filter buttons on the page
-    const filterButtons = document.querySelectorAll('.filter-button');
+    // Find all buttons and project cards
+    const filterButtons = document.querySelectorAll<HTMLAnchorElement>('.filter-button');
+    const projectCards = document.querySelectorAll<HTMLElement>('.project-card');
 
+    // --- 1. Filter the project list ---
+    projectCards.forEach(card => {
+        const cardStatus = card.dataset.status;
+
+        // If there's a filter AND it doesn't match the card's status, hide it
+        if (statusFilter && cardStatus !== statusFilter) {
+            card.style.display = 'none';
+        } else {
+            // Otherwise, make sure it's visible
+            card.style.display = 'block';
+        }
+    });
+
+    // --- 2. Set the active button state ---
     filterButtons.forEach(button => {
         // Get the 'href' attribute from the button
         const href = button.getAttribute('href');
