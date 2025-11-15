@@ -34,6 +34,32 @@ const { title, description, image = FallbackImage } = Astro.props;
 />
 <meta name="generator" content={Astro.generator} />
 
+<script is:inline>
+	// Check if we are on the projects page and a filter is active
+	const url = new URL(window.location.href);
+	if (url.pathname.startsWith('/projects') && url.searchParams.has('status')) {
+		const status = url.searchParams.get('status');
+    
+    // Create a new <style> tag
+    const style = document.createElement('style');
+    
+    // Define the CSS rules
+    // 1. Hide ALL project cards by default
+    // 2. Show ONLY the cards that match the status in the URL
+    style.textContent = `
+		.project-card {
+			display: none;
+		}
+		.project-card[data-status="${status}"] {
+			display: block; 
+		}
+    `;
+    
+    // Add the new <style> tag to the <head> before the page renders
+    document.head.appendChild(style);
+	}
+</script>
+
 <!-- Font preloads -->
 <link
 	rel="preload"
