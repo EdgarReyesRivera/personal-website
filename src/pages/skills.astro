@@ -1,0 +1,168 @@
+---
+// src/pages/skills.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout 
+    title="Skills & Expertise | Edgar Reyes-Rivera" 
+    description="A detailed look at my technical skills, hardware experience, and relevant coursework."
+>
+    <div class="skills-wrapper">
+        <h1>Skills & Expertise</h1>
+        <p class="subtitle">
+            A detailed breakdown of the languages, tools, and technologies 
+            I use to build hardware and software.
+        </p>
+
+        <section>
+            <h2>Technical Skills</h2>
+            <div class="skill-category">
+                <h3>Languages</h3>
+                <ul class="skill-list">
+                    <li>C++ (Proficient)</li>
+                    <li>Java (Proficient)</li>
+                    <li>C# (Intermediate)</li>
+                    <li>Python (Intermediate)</li>
+                    <li>Verilog (Intermediate)</li>
+                    <li>MIPS Assembly</li>
+                    <li>SQL</li>
+                    <li>Scheme</li>
+                    <li>Prolog</li>
+                </ul>
+            </div>
+
+            <div class="skill-category">
+                <h3>Hardware & Systems</h3>
+                <ul class="skill-list">
+                    <li>FPGA Development</li>
+                    <li>Digital Circuit Design</li>
+                    <li>Embedded Systems</li>
+                    <li>RISC-V Architecture</li>
+                    <li>Quartus</li>
+                </ul>
+            </div>
+
+            <div class="skill-category">
+                <h3>Developer Tools & Methodologies</h3>
+                <ul class="skill-list">
+                    <li>Git & GitHub</li>
+                    <li>Agile Methodologies</li>
+                    <li>JIRA / Bitbucket / Confluence</li>
+                    <li>Object-Oriented Programming</li>
+                    <li>Multi-threading</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Relevant Coursework</h2>
+            <p>
+                Key courses from my dual-degree in Computer Engineering 
+                and Computer Science at Miami University.
+            </p>
+            <div class="course-grid">
+                <div class="course-category">
+                    <h3>Computer Engineering</h3>
+                    <ul>
+                        <li>Digital Systems Design</li>
+                        <li>Computer Organization</li>
+                        <li>Embedded Systems Design</li>
+                        <li>Electric Circuit Analysis I</li>
+                    </ul>
+                </div>
+                <div class="course-category">
+                    <h3>Computer Science</h3>
+                    <ul>
+                        <li>Data Abstractions & Structures</li>
+                        <li>Algorithms I</li>
+                        <li>Object-Oriented Programming</li>
+                        <li>Systems I & II</li>
+                        <li>Database Systems</li>
+                        <li>Comparative Programming Languages</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</BaseLayout>
+
+<style>
+    :global(main) {
+        width: auto;
+    }
+
+    .skills-wrapper {
+        max-width: 900px;
+        margin: auto;
+    }
+    .skills-wrapper h1 {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 1.15rem;
+        opacity: 0.9;
+        margin-bottom: 4rem;
+    }
+    section {
+        margin-bottom: 3rem;
+    }
+    h2 {
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    h3 {
+        color: var(--accent-dark);
+        margin-bottom: 1rem;
+    }
+    .skill-category {
+        margin-bottom: 2rem;
+    }
+    .skill-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    .skill-list li {
+        background-color: var(--code-bg);
+        color: var(--accent-dark);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.95rem;
+    }
+
+    .course-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    @media (min-width: 768px) {
+        .course-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    .course-category ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    .course-category li {
+        position: relative;
+        padding-left: 1.75rem;
+        margin-bottom: 0.75rem;
+        font-size: 1.05rem;
+    }
+    .course-category li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--accent-color);
+        font-weight: bold;
+    }
+</style>
