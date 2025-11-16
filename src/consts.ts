@@ -3,3 +3,4 @@
 
 export const SITE_TITLE = 'Edgar Reyes-Rivera | Portfolio';
 export const SITE_DESCRIPTION = 'The professional portfolio of Edgar Reyes-Rivera, a dual major computer engineering & computer science student.';
+export const SITE_NAME = 'Edgar Reyes-Rivera'
