@@ -36,7 +36,7 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
 
 <BaseLayout
     title="Projects | Edgar Reyes-Reyes"
-    description="A showcase of technical projects by Edgar Reyes-Reyes."
+    description="A showcase of technical projects by Edgar Reyes-Rivera."
 >
     <section>
         <h1>My Projects</h1>
@@ -184,24 +184,10 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
     const urlParams = new URLSearchParams(window.location.search);
     const statusFilter = urlParams.get('status');
 
-    // Find all buttons and project cards
+    // Find all buttons
     const filterButtons = document.querySelectorAll<HTMLAnchorElement>('.filter-button');
-    const projectCards = document.querySelectorAll<HTMLElement>('.project-card');
 
-    // --- 1. Filter the project list ---
-    projectCards.forEach(card => {
-        const cardStatus = card.dataset.status;
-
-        // If there's a filter AND it doesn't match the card's status, hide it
-        if (statusFilter && cardStatus !== statusFilter) {
-            card.style.display = 'none';
-        } else {
-            // Otherwise, make sure it's visible
-            card.style.display = 'block';
-        }
-    });
-
-    // --- 2. Set the active button state ---
+    // --- Set the active button state ---
     filterButtons.forEach(button => {
         // Get the 'href' attribute from the button
         const href = button.getAttribute('href');
@@ -214,15 +200,17 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
                     button.classList.add('active');
                 }
             } 
+            
             // 2. Check the other status buttons
             else {
                 try {
                     // This line is now safe from the TypeScript error
                     const buttonStatus = new URL(href, window.location.origin).searchParams.get('status');
-                    
+
                     // If the button's status matches the URL's status, it's active
                     if (buttonStatus === statusFilter) {
                         button.classList.add('active');
+            
                     }
                 } catch (e) {
                     console.error("Could not parse button URL:", e);
