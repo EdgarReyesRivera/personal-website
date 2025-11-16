@@ -3,6 +3,7 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 
 // Get the 'status' from the URL query.
 // This is still useful for filtering the *list* of projects.
@@ -63,25 +64,7 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
         <ul class="project-grid">
             {
                 filteredProjects.map((project) => (
-                    <li class="project-card" data-status={project.data.status}>
-                        <a href={`/projects/${project.id}/`}>
-                            {project.data.heroImage && (
-                                <Image
-                                    width={720}
-                                    height={360}
-                                    src={project.data.heroImage}
-                                    alt={`Hero image for ${project.data.title}`}
-                                    class="card-image"
-                                />
-                            )}
-                            <div class="card-content">
-                                <h3 class="title">{project.data.title}</h3>
-                                <p class="status">{project.data.status}</p>
-                                <p class="description">{project.data.description}</p>
-                            </div>
-                        </a>
-                    </li>
-                ))
+                    <ProjectCard project={project} /> ))
             }
         </ul>
     </section>
@@ -128,54 +111,6 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
         .project-grid {
             grid-template-columns: repeat(2, 1fr);
         }
-    }
-
-    .project-card {
-        background-color: var(--code-bg);
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(var(--shadow-color), 0.1);
-        transition: all 0.2s ease-in-out;
-    }
-    .project-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(var(--shadow-color), 0.2);
-    }
-    .project-card a {
-        text-decoration: none;
-        color: var(--font-color);
-        display: block;
-    }
-    .card-image {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-bottom: 1px solid rgba(var(--shadow-color), 0.1);
-    }
-    .card-content {
-        padding: 1.5rem;
-    }
-    .card-content .title {
-        font-size: 1.5rem;
-        margin: 0 0 0.5rem 0;
-        color: var(--accent-dark);
-    }
-    .card-content .status {
-        display: inline-block;
-        font-size: 0.8rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding: 0.25rem 0.75rem;
-        border-radius: 99px;
-        background-color: var(--accent-color);
-        color: var(--ghost-white);
-        margin: 0 0 1rem 0;
-    }
-    .card-content .description {
-        font-size: 1rem;
-        line-height: 1.6;
-        opacity: 0.9;
     }
 </style>
 
