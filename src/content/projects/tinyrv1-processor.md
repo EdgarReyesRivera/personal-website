@@ -6,6 +6,7 @@ pubDate: 2025-05-16
 tags: ['Verilog', 'RISC-V', 'Digital Circuit Design', 'Hardware', 'Python']
 # heroImage: '../../assets/preview.png' # TODO: Change this to a real project image
 githubUrl: 'https://github.com/EdgarReyesRivera/Tiny_RISC-V_FPGA'
+featured: true
 ---
 
 ## Motivation

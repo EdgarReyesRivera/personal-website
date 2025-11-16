@@ -6,6 +6,7 @@ pubDate: 2024-12-13
 tags: ['Verilog', 'FPGA', 'Digital Circuit Design', 'Image Processing', 'Quartus']
 heroImage: '../../assets/project_images/gaussian-blur-final.png'
 githubUrl: 'https://github.com/EdgarReyesRivera/Gaussian-Blur'
+featured: true
 ---
 
 ## Overview

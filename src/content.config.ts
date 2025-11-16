@@ -35,6 +35,7 @@ const projects = defineCollection({
 			// Optional github url 
 			githubUrl: z.string().url().optional(),
 			heroImage: image().optional(),
+			featured: z.boolean().optional(),
 		}),
 });
 

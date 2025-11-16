@@ -2,6 +2,31 @@
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+import ProjectCard from '../components/ProjectCard.astro';
+
+// Get featured projects
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+    .filter(project => project.data.featured)
+    .sort((a, b) => {
+	const aDate = a.data.pubDate;
+	const bDate = b.data.pubDate;
+
+	if (aDate && bDate) {
+		// Both projects have a date, sort newest first
+		return bDate.valueOf() - aDate.valueOf();
+	} else if (aDate && !bDate) {
+		// 'a' has a date, 'b' does not. 'a' comes first.
+		return -1;
+	} else if (!aDate && bDate) {
+		// 'b' has a date, 'a' does not. 'b' comes first.
+		return 1;
+	} else {
+		// Neither project has a date, keep their original order.
+		return 0;
+	}
+});
 ---
 
 <BaseLayout title="Edgar Reyes-Rivera | Computer Engineering & Computer Science" description={SITE_DESCRIPTION}>
@@ -30,10 +55,21 @@ import { SITE_DESCRIPTION } from '../consts';
             </a>
         </nav>
     </div>
+
+    <section class="featured-work">
+        <h2>Featured Work</h2>
+        <p>A selection of my recent projects. See all projects <a href="/projects">here</a>.</p>
+        <ul class="project-grid">
+            {
+                featuredProjects.map((project) => (
+                    <ProjectCard project={project} />
+                ))
+            }
+        </ul>
+    </section>
 </BaseLayout>
 
 <style>
-    /* ... (hero, intro-text, tagline, cta-nav styles are unchanged) ... */
     .hero {
         display: flex;
         flex-direction: column;
@@ -41,7 +77,6 @@ import { SITE_DESCRIPTION } from '../consts';
         align-items: center;
         min-height: 60vh;
         text-align: center;
-        padding: 2rem 0;
     }
 
     .intro-text h1 {
@@ -60,7 +95,6 @@ import { SITE_DESCRIPTION } from '../consts';
     .bio {
         font-size: 1.15rem;
         max-width: 600px;
-        /* This change centers the block horizontally */
         margin: 0 auto 3rem; 
         opacity: 0.9;
     }
@@ -91,13 +125,41 @@ import { SITE_DESCRIPTION } from '../consts';
         box-shadow: 0 5px 15px rgba(var(--shadow-color), 0.25);
     }
 
-    /* ... (media query is unchanged) ... */
     @media (max-width: 720px) {
         .intro-text h1 {
             font-size: 2.5rem;
         }
         .tagline {
             font-size: 1.2rem;
+        }
+    }
+
+    .featured-work h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    .featured-work p {
+        text-align: center;
+        font-size: 1.15rem;
+        max-width: 600px;
+        margin: 0 auto 3rem;
+        opacity: 0.9;
+    }
+
+    /* Reuse the project grid styles */
+    .project-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+    @media (min-width: 768px) {
+        .project-grid {
+            /* This will show 2 columns on desktop */
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 </style>
