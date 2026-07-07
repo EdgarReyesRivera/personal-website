@@ -48,6 +48,9 @@ const { data, id } = project;
         text-decoration: none;
         color: var(--font-color);
         display: block;
+        /* Fill the grid-stretched <li> so short (imageless) cards are clickable edge to edge */
+        height: 100%;
+        box-sizing: border-box;
     }
     .card-image {
         width: 100%;

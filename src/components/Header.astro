@@ -23,6 +23,20 @@ import HeaderLink from './HeaderLink.astro';
 		</div>
 	</nav>
 </header>
+<script>
+	// On phones the nav links overflow into a scrollable row, and each page
+	// load resets it to scrollLeft 0 — center the active link so it's visible
+	// after navigating. Direct scrollLeft (not scrollIntoView) so the page
+	// itself never scrolls. No-op on desktop where nothing overflows.
+	const links = document.querySelector('.internal-links');
+	const active = links?.querySelector('a.active');
+	if (links instanceof HTMLElement && active instanceof HTMLElement && links.scrollWidth > links.clientWidth) {
+		// offsetLeft is measured from the sticky header (nearest positioned
+		// ancestor), so subtract the container's own offset to get the
+		// link's position within the scrollable row.
+		links.scrollLeft = (active.offsetLeft - links.offsetLeft) - (links.clientWidth - active.offsetWidth) / 2;
+	}
+</script>
 <style>
 	header {
 		position: sticky;
