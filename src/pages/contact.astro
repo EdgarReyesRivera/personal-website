@@ -6,6 +6,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 <BaseLayout
   title="Contact Me | Edgar Reyes-Rivera"
   description="Get in touch with Edgar Reyes-Rivera via email, LinkedIn, or GitHub."
+  width="wide"
 >
   <div class="contact-wrapper">
     <header class="page-header">
@@ -17,14 +18,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     </header>
 
     <div class="contact-links">
-      <a href="mailto:edgar@reyesrivera.dev" class="btn btn-primary">
+      <a href="mailto:edgar@reyesrivera.dev" class="btn contact-button email">
         Email
       </a>
       <a
         href="https://www.linkedin.com/in/edgar-reyes-rivera/"
         target="_blank"
         rel="noopener noreferrer"
-        class="btn btn-secondary contact-button linkedin"
+        class="btn contact-button linkedin"
       >
         LinkedIn
       </a>
@@ -32,7 +33,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         href="https://github.com/EdgarReyesRivera"
         target="_blank"
         rel="noopener noreferrer"
-        class="btn btn-secondary contact-button github"
+        class="btn contact-button github"
       >
         GitHub
       </a>
@@ -97,7 +98,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <style>
   .contact-wrapper {
-    max-width: 800px; /* Increased width to fit calendar comfortably */
+    max-width: 900px; /* Wide enough for the calendar to breathe on desktop */
     margin: auto;
     text-align: center;
   }
@@ -115,6 +116,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     width: 0.6em;
     height: 0.6em;
     border-radius: 50%;
+  }
+  .contact-button.email::before {
+    background-color: var(--accent-color);
   }
   .contact-button.linkedin::before {
     background-color: #0077b5;

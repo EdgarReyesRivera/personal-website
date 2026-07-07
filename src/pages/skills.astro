@@ -1,55 +1,59 @@
 ---
 // src/pages/skills.astro
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-type Skill = { name: string; level?: string };
+// `tags` are matched (case-insensitively) against project frontmatter tags to
+// build the "where I've used this" panel for each skill. Skills without tags
+// (or with no matching projects) render as plain, non-clickable chips.
+type Skill = { name: string; level?: string; tags?: string[] };
 
 const skillCategories: { title: string; skills: Skill[] }[] = [
   {
     title: "Languages",
     skills: [
-      { name: "C++", level: "Proficient" },
-      { name: "C", level: "Proficient" },
-      { name: "SystemVerilog", level: "Intermediate" },
-      { name: "Verilog", level: "Intermediate" },
-      { name: "Python", level: "Intermediate" },
-      { name: "JavaScript", level: "Intermediate" },
-      { name: "Java", level: "Proficient" },
-      { name: "C#", level: "Intermediate" },
-      { name: "CUDA", level: "Learning" },
+      { name: "C++", level: "Proficient", tags: ["C++"] },
+      { name: "C", level: "Proficient", tags: ["C"] },
+      { name: "SystemVerilog", level: "Intermediate", tags: ["SystemVerilog"] },
+      { name: "Verilog", level: "Intermediate", tags: ["Verilog"] },
+      { name: "Python", level: "Intermediate", tags: ["Python"] },
+      { name: "JavaScript", level: "Intermediate", tags: ["JavaScript", "TypeScript"] },
+      { name: "Java", level: "Proficient", tags: ["Java"] },
+      { name: "C#", level: "Intermediate", tags: ["C#"] },
+      { name: "CUDA", level: "Learning", tags: ["CUDA"] },
       { name: "MIPS Assembly" },
-      { name: "SQL" },
+      { name: "SQL", tags: ["SQL"] },
     ],
   },
   {
     title: "Hardware & Embedded Systems",
     skills: [
-      { name: "FPGA Development (Vivado, Quartus)" },
-      { name: "RTL Design (SystemVerilog/Verilog)" },
-      { name: "RISC-V Architecture" },
-      { name: "AXI4 Bus Protocols" },
-      { name: "Digital Circuit Design" },
-      { name: "Hardware/Software Co-Design" },
-      { name: "Serial Protocols (I2C, SPI, UART)" },
+      { name: "FPGA Development (Vivado, Quartus)", tags: ["FPGA", "Vivado", "Quartus"] },
+      { name: "RTL Design (SystemVerilog/Verilog)", tags: ["SystemVerilog", "Verilog", "RTL"] },
+      { name: "RISC-V Architecture", tags: ["RISC-V"] },
+      { name: "AXI4 Bus Protocols", tags: ["AXI4"] },
+      { name: "Digital Circuit Design", tags: ["Digital Circuit Design"] },
+      { name: "Hardware/Software Co-Design", tags: ["Hardware Accelerator", "Zynq"] },
+      { name: "Serial Protocols (I2C, SPI, UART)", tags: ["I2C", "SPI", "UART"] },
     ],
   },
   {
     title: "Systems & Infrastructure",
     skills: [
-      { name: "Linux Systems" },
-      { name: "Multi-threading" },
-      { name: "Virtualization (Proxmox)" },
-      { name: "Docker & Containerization" },
+      { name: "Linux Systems", tags: ["Linux", "Embedded Linux"] },
+      { name: "Multi-threading", tags: ["Multi-threading", "SIMD"] },
+      { name: "Virtualization (Proxmox)", tags: ["Proxmox", "Virtualization"] },
+      { name: "Docker & Containerization", tags: ["Docker"] },
       { name: "Git & GitHub" },
     ],
   },
   {
     title: "Frameworks & Tools",
     skills: [
-      { name: "React (Hooks, State Management)" },
-      { name: "Firebase (Auth, Firestore)" },
-      { name: "Arduino" },
-      { name: "Matlab" },
+      { name: "React (Hooks, State Management)", tags: ["React"] },
+      { name: "Firebase (Auth, Firestore)", tags: ["Firebase"] },
+      { name: "Arduino", tags: ["Arduino"] },
+      { name: "Matlab", tags: ["Matlab"] },
       { name: "Agile Methodologies" },
       { name: "JIRA / Bitbucket / Confluence" },
       { name: "Visual Studio / VSCode" },
@@ -64,6 +68,37 @@ const skillCategories: { title: string; skills: Skill[] }[] = [
     ],
   },
 ];
+
+// Match skills against project tags at build time.
+// When the Experiences section is un-hidden, add getCollection('experiences')
+// here and merge its matches (linking to /experiences/<id>/) the same way.
+const projects = await getCollection("projects");
+
+type Match = { title: string; url: string; status: string };
+
+function matchesFor(skill: Skill): Match[] {
+  if (!skill.tags) return [];
+  const wanted = skill.tags.map((t) => t.toLowerCase());
+  return projects
+    .filter((p) =>
+      (p.data.tags ?? []).some((tag) => wanted.includes(tag.toLowerCase())),
+    )
+    .map((p) => ({
+      title: p.data.title,
+      url: `/projects/${p.id}/`,
+      status: p.data.status,
+    }));
+}
+
+// Index-based ids: name-derived slugs collide (C, C++, C# all slug to "c")
+const categories = skillCategories.map(({ title, skills }, catIndex) => ({
+  title,
+  skills: skills.map((skill, skillIndex) => ({
+    ...skill,
+    id: `${catIndex}-${skillIndex}`,
+    matches: matchesFor(skill),
+  })),
+}));
 ---
 
 <BaseLayout
@@ -76,24 +111,58 @@ const skillCategories: { title: string; skills: Skill[] }[] = [
       <h1>Skills & Expertise</h1>
       <p class="subtitle">
         A detailed breakdown of the languages, tools, and technologies I use to
-        build hardware and software.
+        build hardware and software. Click a highlighted skill to see the
+        projects where I've put it to work.
       </p>
     </header>
 
     <section>
       <h2 class="section-heading">Technical Skills</h2>
       {
-        skillCategories.map(({ title, skills }) => (
+        categories.map(({ title, skills }) => (
           <div class="skill-category">
             <h3>{title}</h3>
             <ul class="skill-list">
-              {skills.map(({ name, level }) => (
-                <li class="chip">
-                  {name}
-                  {level && <span class="level">{level}</span>}
+              {skills.map(({ name, level, id, matches }) => (
+                <li>
+                  {matches.length > 0 ? (
+                    <button
+                      class="chip chip-clickable"
+                      aria-expanded="false"
+                      aria-controls={`matches-${id}`}
+                    >
+                      {name}
+                      {level && <span class="level">{level}</span>}
+                      <span class="caret" aria-hidden="true">▾</span>
+                    </button>
+                  ) : (
+                    <span class="chip">
+                      {name}
+                      {level && <span class="level">{level}</span>}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
+            {skills
+              .filter(({ matches }) => matches.length > 0)
+              .map(({ name, id, matches }) => (
+                <div class="skill-matches" id={`matches-${id}`} hidden>
+                  <p class="matches-title">Where I've used {name}:</p>
+                  <ul class="matches-list">
+                    {matches.map(({ title: projectTitle, url, status }) => (
+                      <li>
+                        <a href={url}>{projectTitle}</a>
+                        <span
+                          class={`status-badge status-${status.toLowerCase()}`}
+                        >
+                          {status}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
           </div>
         ))
       }
@@ -168,6 +237,76 @@ const skillCategories: { title: string; skills: Skill[] }[] = [
     color: var(--muted-color);
   }
 
+  /* Chips backed by projects are interactive */
+  button.chip-clickable {
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-color: var(--accent-color);
+    transition: background-color 0.15s ease, transform 0.15s ease;
+  }
+  button.chip-clickable:hover {
+    background-color: rgba(var(--tropical-indigo-rgb), 0.15);
+    transform: translateY(-1px);
+  }
+  .chip .caret {
+    display: inline-block;
+    margin-left: 0.4em;
+    font-size: 0.75em;
+    color: var(--accent-dark);
+    transition: transform 0.2s ease;
+  }
+  button.chip-clickable[aria-expanded="true"] {
+    background-color: rgba(var(--tropical-indigo-rgb), 0.18);
+  }
+  button.chip-clickable[aria-expanded="true"] .caret {
+    transform: rotate(180deg);
+  }
+
+  /* "Where I've used it" panel */
+  .skill-matches {
+    margin-top: 1rem;
+    padding: 1rem 1.25rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-left: 4px solid var(--accent-color);
+    border-radius: var(--radius-md);
+    animation: panel-in 0.18s ease-out;
+  }
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .matches-title {
+    margin: 0 0 0.5rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .matches-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .matches-list li {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-size: 1rem;
+  }
+  .matches-list a {
+    font-weight: 700;
+  }
+
   .course-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -197,3 +336,31 @@ const skillCategories: { title: string; skills: Skill[] }[] = [
     font-weight: bold;
   }
 </style>
+
+<script>
+  // Toggle the "where I've used it" panel for a clicked skill chip.
+  // Only one panel is open per category at a time.
+  document
+    .querySelectorAll<HTMLButtonElement>(".chip-clickable")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        const panelId = button.getAttribute("aria-controls");
+        const panel = panelId && document.getElementById(panelId);
+        const category = button.closest(".skill-category");
+        if (!panel || !category) return;
+
+        const wasOpen = !panel.hidden;
+        category
+          .querySelectorAll<HTMLElement>(".skill-matches")
+          .forEach((p) => (p.hidden = true));
+        category
+          .querySelectorAll(".chip-clickable")
+          .forEach((b) => b.setAttribute("aria-expanded", "false"));
+
+        if (!wasOpen) {
+          panel.hidden = false;
+          button.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+</script>

@@ -38,6 +38,7 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
 <BaseLayout
     title="Projects | Edgar Reyes-Rivera"
     description="A showcase of technical projects by Edgar Reyes-Rivera."
+    width="wide"
 >
     <section>
         <header class="page-header">
@@ -49,14 +50,14 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
         </header>
 
         <nav class="filter-nav">
-            <a href="/projects" class="btn btn-secondary btn-sm filter-button">
+            <a href="/projects" class="btn btn-sm filter-button">
                 All
             </a>
             {
                 allStatuses.map((status) => (
                     <a
                         href={`/projects?status=${status}`}
-                        class="btn btn-secondary btn-sm filter-button"
+                        class="btn btn-sm filter-button"
                     >
                         {status}
                     </a>
@@ -81,7 +82,7 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
         margin-bottom: 2.5rem;
     }
 
-    /* Filled state for the active filter (hover comes from .btn-secondary) */
+    /* Filled state for the active filter (hover comes from .btn) */
     .filter-button.active {
         background-color: var(--accent-color);
         color: var(--page-background);
@@ -99,6 +100,11 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
     @media (min-width: 768px) {
         .project-grid {
             grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (min-width: 1024px) {
+        .project-grid {
+            grid-template-columns: repeat(3, 1fr);
         }
     }
 </style>

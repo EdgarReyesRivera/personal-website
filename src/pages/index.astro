@@ -28,7 +28,11 @@ const featuredProjects = allProjects
 	}
 });
 
-const highlights = [
+// Set `href` on a highlight to make its card a link. Industry Experience and
+// Leadership will point at the Synchrony/SHPE experience pages once the
+// Experiences section is un-hidden (see CLAUDE.md), e.g. href: '/experiences/<slug>'.
+type Highlight = { label: string; detail: string; href?: string };
+const highlights: Highlight[] = [
     { label: 'Dual Major', detail: 'Computer Engineering & Computer Science, Miami University' },
     { label: 'Industry Experience', detail: 'Software Engineer Intern @ Synchrony' },
     { label: 'Leadership', detail: 'President, SHPE Miami University Chapter' },
@@ -36,7 +40,7 @@ const highlights = [
 ];
 ---
 
-<BaseLayout title="Edgar Reyes-Rivera | Computer Engineering & Computer Science" description={SITE_DESCRIPTION}>
+<BaseLayout title="Edgar Reyes-Rivera | Computer Engineering & Computer Science" description={SITE_DESCRIPTION} width="wide">
     <div class="hero">
         <div class="intro-text">
             <h1 class="gradient-text">Edgar Reyes-Rivera</h1>
@@ -54,13 +58,13 @@ const highlights = [
         </div>
 
         <nav class="cta-nav">
-            <a href="/projects" class="btn btn-primary">
+            <a href="/projects" class="btn">
                 View My Work
             </a>
-            <a href="/resume" class="btn btn-secondary">
+            <a href="/resume" class="btn">
                 My Resume
             </a>
-            <a href="/contact" class="btn btn-secondary">
+            <a href="/contact" class="btn">
                 Get in Touch
             </a>
         </nav>
@@ -68,10 +72,19 @@ const highlights = [
 
     <ul class="highlights">
         {
-            highlights.map(({ label, detail }) => (
+            highlights.map(({ label, detail, href }) => (
                 <li>
-                    <span class="highlight-label">{label}</span>
-                    <span class="highlight-detail">{detail}</span>
+                    {href ? (
+                        <a class="highlight-card is-link" href={href}>
+                            <span class="highlight-label">{label} <span class="arrow">→</span></span>
+                            <span class="highlight-detail">{detail}</span>
+                        </a>
+                    ) : (
+                        <div class="highlight-card">
+                            <span class="highlight-label">{label}</span>
+                            <span class="highlight-detail">{detail}</span>
+                        </div>
+                    )}
                 </li>
             ))
         }
@@ -140,18 +153,44 @@ const highlights = [
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
         list-style: none;
-        margin: 0 0 4rem;
+        margin: 0 auto 4rem;
         padding: 0;
+        max-width: 1000px;
     }
-    .highlights li {
+    @media (min-width: 1024px) {
+        .highlights {
+            grid-template-columns: repeat(4, 1fr);
+            max-width: none;
+        }
+    }
+    .highlight-card {
         display: flex;
         flex-direction: column;
         gap: 0.15rem;
+        height: 100%;
+        box-sizing: border-box;
         background-color: var(--surface);
         border: 1px solid var(--border-subtle);
         border-left: 4px solid var(--accent-color);
         border-radius: var(--radius-md);
         padding: 0.9rem 1.1rem;
+    }
+    /* Linked cards (future experience pages) get hover affordance */
+    a.highlight-card {
+        text-decoration: none;
+        color: var(--font-color);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    a.highlight-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
+    a.highlight-card .arrow {
+        transition: transform 0.2s ease;
+        display: inline-block;
+    }
+    a.highlight-card:hover .arrow {
+        transform: translateX(3px);
     }
     .highlight-label {
         font-size: 0.8rem;
@@ -198,8 +237,12 @@ const highlights = [
     }
     @media (min-width: 768px) {
         .project-grid {
-            /* This will show 2 columns on desktop */
             grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (min-width: 1024px) {
+        .project-grid {
+            grid-template-columns: repeat(3, 1fr);
         }
     }
 
