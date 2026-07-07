@@ -1,0 +1,22 @@
+---
+// src/pages/coursework/[...slug].astro
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import CourseLayout from '../../layouts/CourseLayout.astro';
+
+export async function getStaticPaths() {
+	// Unpublished scaffolds never get a route.
+	const courses = (await getCollection('courses')).filter((c) => c.data.published);
+	return courses.map((course) => ({
+		params: { slug: course.id },
+		props: course,
+	}));
+}
+type Props = CollectionEntry<'courses'>;
+
+const course = Astro.props;
+const { Content } = await render(course);
+---
+
+<CourseLayout {...course.data}>
+	<Content />
+</CourseLayout>

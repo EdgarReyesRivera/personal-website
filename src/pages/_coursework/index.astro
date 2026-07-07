@@ -1,0 +1,115 @@
+---
+// src/pages/coursework/index.astro
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Only published courses get cards; scaffolds stay invisible even once
+// this directory is un-hidden.
+const courses = (await getCollection('courses')).filter((c) => c.data.published);
+
+const departments = ['Computer Engineering', 'Computer Science'] as const;
+const byDepartment = departments
+	.map((department) => ({
+		department,
+		courses: courses
+			.filter((c) => c.data.department === department)
+			.sort(
+				(a, b) =>
+					(a.data.order ?? Number.MAX_SAFE_INTEGER) - (b.data.order ?? Number.MAX_SAFE_INTEGER) ||
+					a.data.title.localeCompare(b.data.title),
+			),
+	}))
+	.filter(({ courses }) => courses.length > 0);
+---
+
+<BaseLayout
+	title="Coursework | Edgar Reyes-Rivera"
+	description="Deep dives into the courses from my dual degree in Computer Engineering and Computer Science at Miami University."
+	width="wide"
+>
+	<header class="page-header">
+		<h1>Coursework</h1>
+		<p class="subtitle">
+			What I studied, what I took away, and what I built in the key courses of
+			my dual degree at Miami University.
+		</p>
+	</header>
+
+	{
+		byDepartment.map(({ department, courses }) => (
+			<section>
+				<h2 class="section-heading">{department}</h2>
+				<ul class="course-grid">
+					{courses.map((course) => (
+						<li class="course-card">
+							<a href={`/coursework/${course.id}/`}>
+								<h3 class="title">{course.data.title}</h3>
+								{(course.data.courseCode || course.data.term) && (
+									<p class="meta">
+										{[course.data.courseCode, course.data.term].filter(Boolean).join(' · ')}
+									</p>
+								)}
+								<p class="description">{course.data.description}</p>
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		))
+	}
+</BaseLayout>
+
+<style>
+	section {
+		margin-bottom: 3rem;
+	}
+	.course-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	@media (min-width: 768px) {
+		.course-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (min-width: 1024px) {
+		.course-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	.course-card {
+		background-color: var(--surface);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-lg);
+		transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+	}
+	.course-card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-md);
+	}
+	.course-card a {
+		display: block;
+		padding: 1.5rem;
+		color: var(--font-color);
+		text-decoration: none;
+	}
+	.course-card .title {
+		font-size: 1.25rem;
+		margin: 0 0 0.35rem 0;
+		color: var(--accent-dark);
+	}
+	.course-card .meta {
+		font-size: 0.9rem;
+		color: var(--muted-color);
+		margin: 0 0 0.75rem 0;
+	}
+	.course-card .description {
+		font-size: 0.95rem;
+		line-height: 1.6;
+		margin: 0;
+	}
+</style>

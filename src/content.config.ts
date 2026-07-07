@@ -77,4 +77,30 @@ const experiences = defineCollection({
 		}),
 });
 
-export const collections = { blog, projects, experiences };
+const courses = defineCollection({
+	// Load Markdown and MDX files in the `src/content/courses/` directory.
+	loader: glob({ base: 'src/content/courses', pattern: '**/*.{md,mdx}' }),
+	// Type-check frontmatter using a schema
+	schema: z.object({
+		// Course name, e.g. 'Digital Systems Design'
+		title: z.string(),
+		description: z.string(),
+		// e.g. 'ECE 287'
+		courseCode: z.string().optional(),
+		// Groups the skills-page "Relevant Coursework" list
+		department: z.enum(['Computer Engineering', 'Computer Science']),
+		// When the course was taken, e.g. 'Fall 2025'
+		term: z.string().optional(),
+		// Matched against skill tag aliases on the skills page, same as projects
+		tags: z.array(z.string()).optional(),
+		// Project ids (content file names) built in this course, e.g. 'tinyrv1-processor'
+		projects: z.array(z.string()).optional(),
+		// Ordering within the department's coursework list (lower = first)
+		order: z.number().optional(),
+		// Only published courses get pages and skill-dropdown links;
+		// scaffolds stay false until the write-up is done.
+		published: z.boolean().default(false),
+	}),
+});
+
+export const collections = { blog, projects, experiences, courses };

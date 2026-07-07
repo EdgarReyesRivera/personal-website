@@ -2,6 +2,7 @@
 // src/pages/skills.astro
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { COURSEWORK_ENABLED } from "../consts";
 
 // `tags` are matched (case-insensitively) against project frontmatter tags to
 // build the "where I've used this" panel for each skill. Skills without tags
@@ -73,8 +74,16 @@ const skillCategories: { title: string; skills: Skill[] }[] = [
 // When the Experiences section is un-hidden, add getCollection('experiences')
 // here and merge its matches (linking to /experiences/<id>/) the same way.
 const projects = await getCollection("projects");
+const courses = await getCollection("courses");
+
+// Course links only render once the section is live AND the course is written;
+// otherwise they'd point at pages that don't exist.
+const linkableCourses = COURSEWORK_ENABLED
+  ? courses.filter((c) => c.data.published)
+  : [];
 
 type Match = { title: string; url: string; status: string };
+type CourseMatch = { title: string; url: string };
 
 function matchesFor(skill: Skill): Match[] {
   if (!skill.tags) return [];
@@ -90,6 +99,19 @@ function matchesFor(skill: Skill): Match[] {
     }));
 }
 
+function courseMatchesFor(skill: Skill): CourseMatch[] {
+  if (!skill.tags) return [];
+  const wanted = skill.tags.map((t) => t.toLowerCase());
+  return linkableCourses
+    .filter((c) =>
+      (c.data.tags ?? []).some((tag) => wanted.includes(tag.toLowerCase())),
+    )
+    .map((c) => ({
+      title: c.data.title,
+      url: `/coursework/${c.id}/`,
+    }));
+}
+
 // Index-based ids: name-derived slugs collide (C, C++, C# all slug to "c")
 const categories = skillCategories.map(({ title, skills }, catIndex) => ({
   title,
@@ -97,7 +119,23 @@ const categories = skillCategories.map(({ title, skills }, catIndex) => ({
     ...skill,
     id: `${catIndex}-${skillIndex}`,
     matches: matchesFor(skill),
+    courseMatches: courseMatchesFor(skill),
   })),
+}));
+
+// The "Relevant Coursework" list is driven by the courses collection; a name
+// becomes a link only when the section is live and that course is published.
+const departments = ["Computer Engineering", "Computer Science"] as const;
+const courseworkByDepartment = departments.map((department) => ({
+  department,
+  courses: courses
+    .filter((c) => c.data.department === department)
+    .sort(
+      (a, b) =>
+        (a.data.order ?? Number.MAX_SAFE_INTEGER) -
+          (b.data.order ?? Number.MAX_SAFE_INTEGER) ||
+        a.data.title.localeCompare(b.data.title),
+    ),
 }));
 ---
 
@@ -123,9 +161,9 @@ const categories = skillCategories.map(({ title, skills }, catIndex) => ({
           <div class="skill-category">
             <h3>{title}</h3>
             <ul class="skill-list">
-              {skills.map(({ name, level, id, matches }) => (
+              {skills.map(({ name, level, id, matches, courseMatches }) => (
                 <li>
-                  {matches.length > 0 ? (
+                  {matches.length > 0 || courseMatches.length > 0 ? (
                     <button
                       class="chip chip-clickable"
                       aria-expanded="false"
@@ -143,26 +181,47 @@ const categories = skillCategories.map(({ title, skills }, catIndex) => ({
                   )}
                 </li>
               ))}
+              {/* Panels live in the same flex list as the chips; the script
+                  moves the open one right after the clicked chip's row. */}
+              {skills
+                .filter(
+                  ({ matches, courseMatches }) =>
+                    matches.length > 0 || courseMatches.length > 0,
+                )
+                .map(({ name, id, matches, courseMatches }) => (
+                  <li class="skill-matches" id={`matches-${id}`} hidden>
+                    {matches.length > 0 && (
+                      <>
+                        <p class="matches-title">Where I've used {name}:</p>
+                        <ul class="matches-list">
+                          {matches.map(({ title: projectTitle, url, status }) => (
+                            <li>
+                              <a href={url}>{projectTitle}</a>
+                              <span
+                                class={`status-badge status-${status.toLowerCase()}`}
+                              >
+                                {status}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
+                    {courseMatches.length > 0 && (
+                      <div class="matches-courses">
+                        <p class="matches-title">Related coursework:</p>
+                        <div class="course-links">
+                          {courseMatches.map(({ title: courseTitle, url }) => (
+                            <a class="btn btn-sm" href={url}>
+                              {courseTitle}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                ))}
             </ul>
-            {skills
-              .filter(({ matches }) => matches.length > 0)
-              .map(({ name, id, matches }) => (
-                <div class="skill-matches" id={`matches-${id}`} hidden>
-                  <p class="matches-title">Where I've used {name}:</p>
-                  <ul class="matches-list">
-                    {matches.map(({ title: projectTitle, url, status }) => (
-                      <li>
-                        <a href={url}>{projectTitle}</a>
-                        <span
-                          class={`status-badge status-${status.toLowerCase()}`}
-                        >
-                          {status}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
           </div>
         ))
       }
@@ -175,31 +234,26 @@ const categories = skillCategories.map(({ title, skills }, catIndex) => ({
         Science at Miami University.
       </p>
       <div class="course-grid">
-        <div class="course-category">
-          <h3>Computer Engineering</h3>
-          <ul>
-            <li>Digital Systems Design</li>
-            <li>Computer Organization</li>
-            <li>Embedded Systems Design</li>
-            <li>Electric Circuit Analysis I</li>
-            <li>Elements of Robotics</li>
-            <li>Signals and Systems</li>
-            <li>Network Performance Analysis</li>
-          </ul>
-        </div>
-        <div class="course-category">
-          <h3>Computer Science</h3>
-          <ul>
-            <li>Data Abstractions & Structures</li>
-            <li>Algorithms I</li>
-            <li>Object-Oriented Programming</li>
-            <li>Systems I & II</li>
-            <li>Database Systems</li>
-            <li>Comparative Programming Languages</li>
-            <li>Deep Learning</li>
-            <li>Image Processing</li>
-          </ul>
-        </div>
+        {
+          courseworkByDepartment.map(({ department, courses }) => (
+            <div class="course-category">
+              <h3>{department}</h3>
+              <ul>
+                {courses.map((course) => (
+                  <li>
+                    {COURSEWORK_ENABLED && course.data.published ? (
+                      <a href={`/coursework/${course.id}/`}>
+                        {course.data.title}
+                      </a>
+                    ) : (
+                      course.data.title
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
       </div>
     </section>
   </div>
@@ -263,9 +317,11 @@ const categories = skillCategories.map(({ title, skills }, catIndex) => ({
     transform: rotate(180deg);
   }
 
-  /* "Where I've used it" panel */
+  /* "Where I've used it" panel — a full-width flex row inside the chip
+     list, so it always sits on its own line right under the clicked row */
   .skill-matches {
-    margin-top: 1rem;
+    flex-basis: 100%;
+    margin: 0.25rem 0;
     padding: 1rem 1.25rem;
     background-color: var(--surface);
     border: 1px solid var(--border-subtle);
@@ -306,6 +362,14 @@ const categories = skillCategories.map(({ title, skills }, catIndex) => ({
   .matches-list a {
     font-weight: 700;
   }
+  .matches-list + .matches-courses {
+    margin-top: 0.85rem;
+  }
+  .course-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 
   .course-grid {
     display: grid;
@@ -340,14 +404,35 @@ const categories = skillCategories.map(({ title, skills }, catIndex) => ({
 <script>
   // Toggle the "where I've used it" panel for a clicked skill chip.
   // Only one panel is open per category at a time.
+
+  // Move the panel <li> right after the last chip in the clicked chip's
+  // visual row (same offsetTop), so it opens directly under that row
+  // instead of at the bottom of the category.
+  function positionPanel(panel: HTMLElement, chipItem: HTMLElement) {
+    const list = chipItem.parentElement;
+    if (!list) return;
+    const wasHidden = panel.hidden;
+    panel.hidden = true; // don't let the panel itself shift rows while measuring
+    const rowTop = chipItem.offsetTop;
+    let rowEnd = chipItem;
+    list
+      .querySelectorAll<HTMLElement>("li:not(.skill-matches)")
+      .forEach((item) => {
+        if (Math.abs(item.offsetTop - rowTop) < 4) rowEnd = item;
+      });
+    rowEnd.after(panel);
+    panel.hidden = wasHidden;
+  }
+
   document
     .querySelectorAll<HTMLButtonElement>(".chip-clickable")
     .forEach((button) => {
       button.addEventListener("click", () => {
         const panelId = button.getAttribute("aria-controls");
-        const panel = panelId && document.getElementById(panelId);
+        const panel = panelId ? document.getElementById(panelId) : null;
+        const chipItem = button.closest("li");
         const category = button.closest(".skill-category");
-        if (!panel || !category) return;
+        if (!panel || !chipItem || !category) return;
 
         const wasOpen = !panel.hidden;
         category
@@ -358,9 +443,28 @@ const categories = skillCategories.map(({ title, skills }, catIndex) => ({
           .forEach((b) => b.setAttribute("aria-expanded", "false"));
 
         if (!wasOpen) {
+          positionPanel(panel, chipItem);
           panel.hidden = false;
           button.setAttribute("aria-expanded", "true");
         }
       });
     });
+
+  // Rows re-wrap when the viewport changes (e.g. phone rotation); keep any
+  // open panel under its chip's row.
+  let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      document
+        .querySelectorAll<HTMLElement>(".skill-matches:not([hidden])")
+        .forEach((panel) => {
+          const button = document.querySelector(
+            `[aria-controls="${panel.id}"]`,
+          );
+          const chipItem = button?.closest("li");
+          if (chipItem) positionPanel(panel, chipItem);
+        });
+    }, 100);
+  });
 </script>

@@ -4,3 +4,9 @@
 export const SITE_TITLE = 'Edgar Reyes-Rivera | Portfolio';
 export const SITE_DESCRIPTION = 'The professional portfolio of Edgar Reyes-Rivera, a dual major computer engineering & computer science student.';
 export const SITE_NAME = 'Edgar Reyes-Rivera'
+
+// Master switch for the Coursework section. While false, the skills page
+// renders no links to /coursework/ pages (they'd 404 — the pages dir is the
+// underscore-hidden src/pages/_coursework/). Flip to true when un-hiding the
+// section; see CLAUDE.md "Coursework section (hidden)".
+export const COURSEWORK_ENABLED: boolean = false;
