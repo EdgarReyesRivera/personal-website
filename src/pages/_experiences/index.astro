@@ -1,0 +1,113 @@
+---
+// src/pages/experiences/index.astro
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const experiences = (await getCollection('experiences')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<BaseLayout
+	title="Experiences | Edgar Reyes-Rivera"
+	description="Experiences representing Miami University, from legislative advocacy to industry partnerships."
+>
+	<section>
+		<h1>Experiences</h1>
+		<p>
+			Moments where I've had the chance to represent Miami University beyond
+			campus, from advocacy trips to industry and alumni events.
+		</p>
+
+		<ul class="post-grid">
+			{
+				experiences.map((experience) => (
+					<li class="post-card">
+						<a href={`/experiences/${experience.id}/`}>
+							{experience.data.heroImage && (
+								<Image
+									width={720}
+									height={360}
+									src={experience.data.heroImage}
+									alt={`Hero image for ${experience.data.title}`}
+									class="card-image"
+								/>
+							)}
+							<div class="card-content">
+								<h3 class="title">{experience.data.title}</h3>
+								<p class="meta">
+									{experience.data.location} &middot;{' '}
+									<FormattedDate date={experience.data.pubDate} />
+								</p>
+								<p class="description">{experience.data.description}</p>
+							</div>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</BaseLayout>
+
+<style>
+	.post-grid {
+		display: grid;
+		grid-template-columns: 1fr; /* 1 column on mobile */
+		gap: 2rem;
+		list-style-type: none;
+		margin: 2rem 0 0 0;
+		padding: 0;
+	}
+
+	/* Switch to 2 columns on larger screens */
+	@media (min-width: 768px) {
+		.post-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	.post-card {
+		background-color: var(--code-bg);
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 4px 12px rgba(var(--shadow-color), 0.1);
+		transition: all 0.2s ease-in-out;
+	}
+	.post-card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 8px 20px rgba(var(--shadow-color), 0.2);
+	}
+	.post-card a {
+		text-decoration: none;
+		color: var(--font-color);
+		display: block;
+	}
+	.card-image {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+		border-bottom: 1px solid rgba(var(--shadow-color), 0.1);
+	}
+	.card-content {
+		padding: 1.5rem;
+	}
+	.card-content .title {
+		font-size: 1.5rem;
+		margin: 0 0 0.5rem 0;
+		color: var(--accent-dark);
+	}
+	.card-content .meta {
+		font-size: 0.9rem;
+		color: var(--font-color);
+		opacity: 0.8;
+		margin: 0 0 1rem 0;
+	}
+	.card-content .description {
+		font-size: 1rem;
+		line-height: 1.6;
+		opacity: 0.9;
+		margin: 0;
+	}
+</style>

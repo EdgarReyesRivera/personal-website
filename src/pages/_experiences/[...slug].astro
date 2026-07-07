@@ -1,0 +1,20 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import ExperienceLayout from '../../layouts/ExperienceLayout.astro';
+
+export async function getStaticPaths() {
+	const experiences = await getCollection('experiences');
+	return experiences.map((experience) => ({
+		params: { slug: experience.id },
+		props: experience,
+	}));
+}
+type Props = CollectionEntry<'experiences'>;
+
+const experience = Astro.props;
+const { Content } = await render(experience);
+---
+
+<ExperienceLayout {...experience.data}>
+	<Content />
+</ExperienceLayout>

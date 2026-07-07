@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Claude
+CLAUDE.md
+
+# deno (used on machines without node/npm; Cloudflare builds with npm)
+deno.lock

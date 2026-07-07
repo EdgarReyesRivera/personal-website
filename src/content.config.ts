@@ -39,4 +39,42 @@ const projects = defineCollection({
 		}),
 });
 
-export const collections = { blog, projects };
+const experiences = defineCollection({
+	// Load Markdown and MDX files in the `src/content/experiences/` directory.
+	loader: glob({ base: 'src/content/experiences', pattern: '**/*.{md,mdx}' }),
+	// Type-check frontmatter using a schema
+	schema: ({ image }) =>
+		z.object({
+			title: z.string(),
+			description: z.string(),
+			pubDate: z.coerce.date(),
+			updatedDate: z.coerce.date().optional(),
+			// e.g. 'Washington, D.C.'
+			location: z.string(),
+			// The capacity in which I represented Miami, e.g. 'SHPE Chapter President'
+			role: z.string().optional(),
+			heroImage: image().optional(),
+			// Extra trip photos rendered as a grid after the body
+			gallery: z
+				.array(
+					z.object({
+						src: image(),
+						alt: z.string(),
+						caption: z.string().optional(),
+					}),
+				)
+				.optional(),
+			// External links rendered in a "Related Links" section
+			links: z
+				.array(
+					z.object({
+						label: z.string(),
+						url: z.string().url(),
+					}),
+				)
+				.optional(),
+			tags: z.array(z.string()).optional(),
+		}),
+});
+
+export const collections = { blog, projects, experiences };
