@@ -36,25 +36,27 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
 ---
 
 <BaseLayout
-    title="Projects | Edgar Reyes-Reyes"
+    title="Projects | Edgar Reyes-Rivera"
     description="A showcase of technical projects by Edgar Reyes-Rivera."
 >
     <section>
-        <h1>My Projects</h1>
-        <p>
-            A collection of my technical projects, from hardware design to
-            full-stack software.
-        </p>
+        <header class="page-header">
+            <h1>My Projects</h1>
+            <p class="subtitle">
+                A collection of my technical projects, from hardware design to
+                full-stack software.
+            </p>
+        </header>
 
         <nav class="filter-nav">
-            <a href="/projects" class="filter-button">
+            <a href="/projects" class="btn btn-secondary btn-sm filter-button">
                 All
             </a>
             {
                 allStatuses.map((status) => (
                     <a
                         href={`/projects?status=${status}`}
-                        class="filter-button"
+                        class="btn btn-secondary btn-sm filter-button"
                     >
                         {status}
                     </a>
@@ -74,28 +76,15 @@ const allStatuses = ['Completed', 'In-Progress', 'Future'];
     .filter-nav {
         display: flex;
         flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 2rem;
-    }
-    .filter-button {
-        padding: 0.5rem 1.5rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1rem;
-        background-color: transparent;
-        color: var(--accent-color);
-        border: 2px solid var(--accent-color);
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 2.5rem;
     }
 
-    /* This is the "filled" state for both hover and active */
-    .filter-button:hover,
+    /* Filled state for the active filter (hover comes from .btn-secondary) */
     .filter-button.active {
         background-color: var(--accent-color);
-        color: var(--page-background); /* Uses page background for contrast */
-        transform: translateY(-2px);
+        color: var(--page-background);
     }
 
     .project-grid {

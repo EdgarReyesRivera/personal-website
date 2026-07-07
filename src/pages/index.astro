@@ -27,34 +27,55 @@ const featuredProjects = allProjects
 		return 0;
 	}
 });
+
+const highlights = [
+    { label: 'Dual Major', detail: 'Computer Engineering & Computer Science, Miami University' },
+    { label: 'Industry Experience', detail: 'Software Engineer Intern @ Synchrony' },
+    { label: 'Leadership', detail: 'President, SHPE Miami University Chapter' },
+    { label: 'Class of 2027', detail: 'Graduating May 2027 · Seeking full-time roles' },
+];
 ---
 
 <BaseLayout title="Edgar Reyes-Rivera | Computer Engineering & Computer Science" description={SITE_DESCRIPTION}>
     <div class="hero">
         <div class="intro-text">
-            <h1>Edgar Reyes-Rivera</h1>
+            <h1 class="gradient-text">Edgar Reyes-Rivera</h1>
             <p class="tagline">
                 Dual Major Computer Engineering & Computer Science Student
             </p>
+            <p class="availability">
+                Graduating May 2027 · Seeking full-time opportunities
+            </p>
             <p class="bio">
-                I'm passionate about building robust, high-performance systems from the 
-                ground up. I thrive on the challenges found at the intersection of 
+                I'm passionate about building robust, high-performance systems from the
+                ground up. I thrive on the challenges found at the intersection of
                 hardware and software.
             </p>
         </div>
 
         <nav class="cta-nav">
-            <a href="/projects" class="cta-button">
+            <a href="/projects" class="btn btn-primary">
                 View My Work
             </a>
-            <a href="/resume" class="cta-button">
+            <a href="/resume" class="btn btn-secondary">
                 My Resume
             </a>
-            <a href="/about" class="cta-button">
-                More About Me
+            <a href="/contact" class="btn btn-secondary">
+                Get in Touch
             </a>
         </nav>
     </div>
+
+    <ul class="highlights">
+        {
+            highlights.map(({ label, detail }) => (
+                <li>
+                    <span class="highlight-label">{label}</span>
+                    <span class="highlight-detail">{detail}</span>
+                </li>
+            ))
+        }
+    </ul>
 
     <section class="featured-work">
         <h2>Featured Work</h2>
@@ -75,27 +96,34 @@ const featuredProjects = allProjects
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        min-height: 50vh;
         text-align: center;
+        padding: 3rem 0 3.5rem;
     }
 
     .intro-text h1 {
-        font-size: 3.5rem;
+        font-size: clamp(2.4rem, 6vw, 3.5rem);
         margin: 0;
-        color: var(--font-color);
+        line-height: 1.15;
     }
 
     .tagline {
-        font-size: 1.5rem;
+        font-size: clamp(1.1rem, 3vw, 1.4rem);
+        font-weight: 700;
+        color: var(--accent-dark);
+        margin: 0.75rem 0 0;
+    }
+
+    .availability {
+        font-size: 1rem;
         font-weight: 500;
-        color: var(--accent-color);
-        margin: 0.5rem 0 1.5rem 0;
+        color: var(--muted-color);
+        margin: 0.5rem 0 1.5rem;
     }
 
     .bio {
         font-size: 1.15rem;
         max-width: 600px;
-        margin: 0 auto 3rem; 
+        margin: 0 auto 2.5rem;
         opacity: 0.9;
     }
 
@@ -103,55 +131,63 @@ const featuredProjects = allProjects
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 1.5rem;
+        gap: 1rem;
     }
 
-    .cta-button {
-        padding: 0.8rem 1.8rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1.1rem;
-        background-color: transparent;
-        color: var(--accent-color);
-        border: 2px solid var(--accent-color);
-        transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
+    /* Highlights strip: quick credibility markers */
+    .highlights {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        list-style: none;
+        margin: 0 0 4rem;
+        padding: 0;
     }
-    
-    .cta-button:hover {
-        background-color: var(--accent-color);
-        color: var(--page-background); /* This ensures contrast */
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(var(--shadow-color), 0.25);
+    .highlights li {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        background-color: var(--surface);
+        border: 1px solid var(--border-subtle);
+        border-left: 4px solid var(--accent-color);
+        border-radius: var(--radius-md);
+        padding: 0.9rem 1.1rem;
     }
-
-    @media (max-width: 720px) {
-        .intro-text h1 {
-            font-size: 2.5rem;
-        }
-        .tagline {
-            font-size: 1.2rem;
-        }
-        .featured-work h2 {
-            margin-top: 1em;
-        }
+    .highlight-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--accent-dark);
+    }
+    .highlight-detail {
+        font-size: 0.98rem;
+        line-height: 1.45;
     }
 
     .featured-work h2 {
         margin-top: 0.5em;
         text-align: center;
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+        margin-bottom: 0.5rem;
+    }
+    .featured-work h2::after {
+        content: '';
+        display: block;
+        width: 64px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--accent-gradient);
+        margin: 0.85rem auto 0;
     }
     .featured-work p {
         text-align: center;
         font-size: 1.15rem;
         max-width: 600px;
-        margin: 0 auto 3rem;
-        opacity: 0.9;
+        margin: 1rem auto 2.5rem;
+        color: var(--muted-color);
     }
 
-    /* Reuse the project grid styles */
     .project-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -164,6 +200,23 @@ const featuredProjects = allProjects
         .project-grid {
             /* This will show 2 columns on desktop */
             grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 720px) {
+        .hero {
+            padding: 2rem 0 2.5rem;
+        }
+        .cta-nav {
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+            max-width: 380px;
+        }
+        .highlights {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
         }
     }
 </style>

@@ -1,88 +1,106 @@
 ---
 // src/pages/skills.astro
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+type Skill = { name: string; level?: string };
+
+const skillCategories: { title: string; skills: Skill[] }[] = [
+  {
+    title: "Languages",
+    skills: [
+      { name: "C++", level: "Proficient" },
+      { name: "C", level: "Proficient" },
+      { name: "SystemVerilog", level: "Intermediate" },
+      { name: "Verilog", level: "Intermediate" },
+      { name: "Python", level: "Intermediate" },
+      { name: "JavaScript", level: "Intermediate" },
+      { name: "Java", level: "Proficient" },
+      { name: "C#", level: "Intermediate" },
+      { name: "CUDA", level: "Learning" },
+      { name: "MIPS Assembly" },
+      { name: "SQL" },
+    ],
+  },
+  {
+    title: "Hardware & Embedded Systems",
+    skills: [
+      { name: "FPGA Development (Vivado, Quartus)" },
+      { name: "RTL Design (SystemVerilog/Verilog)" },
+      { name: "RISC-V Architecture" },
+      { name: "AXI4 Bus Protocols" },
+      { name: "Digital Circuit Design" },
+      { name: "Hardware/Software Co-Design" },
+      { name: "Serial Protocols (I2C, SPI, UART)" },
+    ],
+  },
+  {
+    title: "Systems & Infrastructure",
+    skills: [
+      { name: "Linux Systems" },
+      { name: "Multi-threading" },
+      { name: "Virtualization (Proxmox)" },
+      { name: "Docker & Containerization" },
+      { name: "Git & GitHub" },
+    ],
+  },
+  {
+    title: "Frameworks & Tools",
+    skills: [
+      { name: "React (Hooks, State Management)" },
+      { name: "Firebase (Auth, Firestore)" },
+      { name: "Arduino" },
+      { name: "Matlab" },
+      { name: "Agile Methodologies" },
+      { name: "JIRA / Bitbucket / Confluence" },
+      { name: "Visual Studio / VSCode" },
+    ],
+  },
+  {
+    title: "Certifications",
+    skills: [
+      {
+        name: "Ohio Southwest Alliance on Semiconductors and Integrated Scalable Manufacturing (O.A.S.I.S)",
+      },
+    ],
+  },
+];
 ---
 
 <BaseLayout
   title="Skills & Expertise | Edgar Reyes-Rivera"
   description="A detailed look at my technical skills, hardware experience, and relevant coursework."
+  width="wide"
 >
   <div class="skills-wrapper">
-    <h1>Skills & Expertise</h1>
-    <p class="subtitle">
-      A detailed breakdown of the languages, tools, and technologies I use to
-      build hardware and software.
-    </p>
+    <header class="page-header">
+      <h1>Skills & Expertise</h1>
+      <p class="subtitle">
+        A detailed breakdown of the languages, tools, and technologies I use to
+        build hardware and software.
+      </p>
+    </header>
 
     <section>
-      <h2>Technical Skills</h2>
-      <div class="skill-category">
-        <h3>Languages</h3>
-        <ul class="skill-list">
-          <li>C++ (Proficient)</li>
-          <li>C (Proficient)</li>
-          <li>SystemVerilog (Intermediate)</li>
-          <li>Verilog (Intermediate)</li>
-          <li>Python (Intermediate)</li>
-          <li>JavaScript (Intermediate)</li>
-          <li>Java (Proficient)</li>
-          <li>C# (Intermediate)</li>
-          <li>CUDA (Learning)</li>
-          <li>MIPS Assembly</li>
-          <li>SQL</li>
-        </ul>
-      </div>
-
-      <div class="skill-category">
-        <h3>Hardware & Embedded Systems</h3>
-        <ul class="skill-list">
-          <li>FPGA Development (Vivado, Quartus)</li>
-          <li>RTL Design (SystemVerilog/Verilog)</li>
-          <li>RISC-V Architecture</li>
-          <li>AXI4 Bus Protocols</li>
-          <li>Digital Circuit Design</li>
-          <li>Hardware/Software Co-Design</li>
-          <li>Serial Protocols (I2C, SPI, UART)</li>
-        </ul>
-      </div>
-
-      <div class="skill-category">
-        <h3>Systems & Infrastructure</h3>
-        <ul class="skill-list">
-          <li>Linux Systems</li>
-          <li>Multi-threading</li>
-          <li>Virtualization (Proxmox)</li>
-          <li>Docker & Containerization</li>
-          <li>Git & GitHub</li>
-        </ul>
-      </div>
-
-      <div class="skill-category">
-        <h3>Frameworks & Tools</h3>
-        <ul class="skill-list">
-          <li>React (Hooks, State Management)</li>
-          <li>Firebase (Auth, Firestore)</li>
-          <li>Arduino</li>
-          <li>Matlab</li>
-          <li>Agile Methodologies</li>
-          <li>JIRA / Bitbucket / Confluence</li>
-          <li>Visual Studio / VSCode</li>
-        </ul>
-      </div>
-
-      <div class="skill-category">
-        <h3>Certifications</h3>
-        <ul class="skill-list">
-          <li>
-            Ohio Southwest Alliance on Semiconductors and Integrated Scalable
-            Manufacturing (O.A.S.I.S)
-          </li>
-        </ul>
-      </div>
+      <h2 class="section-heading">Technical Skills</h2>
+      {
+        skillCategories.map(({ title, skills }) => (
+          <div class="skill-category">
+            <h3>{title}</h3>
+            <ul class="skill-list">
+              {skills.map(({ name, level }) => (
+                <li class="chip">
+                  {name}
+                  {level && <span class="level">{level}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
     </section>
 
     <section>
-      <h2>Relevant Coursework</h2>
+      <h2 class="section-heading">Relevant Coursework</h2>
       <p>
         Key courses from my dual-degree in Computer Engineering and Computer
         Science at Miami University.
@@ -119,39 +137,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 </BaseLayout>
 
 <style>
-  :global(main) {
-    width: auto;
-    /* Standardizing width to match About page feel */
-    max-width: 1100px;
-    margin: auto;
-  }
-
   .skills-wrapper {
     width: 100%;
     margin: auto;
   }
-  .skills-wrapper h1 {
-    text-align: center;
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-  }
-  .subtitle {
-    text-align: center;
-    font-size: 1.15rem;
-    opacity: 0.9;
-    margin-bottom: 4rem;
-  }
   section {
     margin-bottom: 3rem;
-  }
-  h2 {
-    border-bottom: 2px solid var(--accent-color);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
   }
   h3 {
     color: var(--accent-dark);
     margin-bottom: 1rem;
+    font-size: 1.25rem;
   }
   .skill-category {
     margin-bottom: 2rem;
@@ -164,13 +160,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     flex-wrap: wrap;
     gap: 0.75rem;
   }
-  .skill-list li {
-    background-color: var(--code-bg);
-    color: var(--font-color); /* Changed from accent-dark for better contrast */
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.95rem;
+  .chip .level {
+    margin-left: 0.5em;
+    padding-left: 0.6em;
+    border-left: 1px solid var(--border-subtle);
+    font-size: 0.8rem;
+    color: var(--muted-color);
   }
 
   .course-grid {

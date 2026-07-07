@@ -12,7 +12,7 @@ const { data, id } = project;
 
 <li class="project-card" data-status={data.status}>
     <a href={`/projects/${id}/`}>
-        {data.heroImage && (
+        {data.heroImage ? (
             <Image
                 width={720}
                 height={360}
@@ -20,10 +20,12 @@ const { data, id } = project;
                 alt={`Hero image for ${data.title}`}
                 class="card-image"
             />
+        ) : (
+            <div class="card-accent" aria-hidden="true" />
         )}
         <div class="card-content">
             <h3 class="title">{data.title}</h3>
-            <p class="status">{data.status}</p>
+            <p class={`status-badge status-${data.status.toLowerCase()}`}>{data.status}</p>
             <p class="description">{data.description}</p>
         </div>
     </a>
@@ -31,15 +33,16 @@ const { data, id } = project;
 
 <style>
     .project-card {
-        background-color: var(--code-bg);
-        border-radius: 12px;
+        background-color: var(--surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
         overflow: hidden;
-        box-shadow: 0 4px 12px rgba(var(--shadow-color), 0.1);
+        box-shadow: var(--shadow-sm);
         transition: all 0.2s ease-in-out;
     }
     .project-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(var(--shadow-color), 0.2);
+        box-shadow: var(--shadow-lg);
     }
     .project-card a {
         text-decoration: none;
@@ -50,31 +53,29 @@ const { data, id } = project;
         width: 100%;
         height: 200px;
         object-fit: cover;
-        border-bottom: 1px solid rgba(var(--shadow-color), 0.1);
+        border-radius: 0;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+    /* Keeps grid rhythm for projects without a hero image yet */
+    .card-accent {
+        height: 6px;
+        background: var(--accent-gradient);
     }
     .card-content {
         padding: 1.5rem;
     }
     .card-content .title {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
         margin: 0 0 0.5rem 0;
         color: var(--accent-dark);
     }
-    .card-content .status {
-        display: inline-block;
-        font-size: 0.8rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding: 0.25rem 0.75rem;
-        border-radius: 99px;
-        background-color: var(--accent-color);
-        color: var(--ghost-white);
+    .card-content .status-badge {
         margin: 0 0 1rem 0;
     }
     .card-content .description {
         font-size: 1rem;
         line-height: 1.6;
         opacity: 0.9;
+        margin: 0;
     }
 </style>

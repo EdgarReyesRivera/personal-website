@@ -9,7 +9,7 @@ type Props = CollectionEntry<'projects'>['data'];
 const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} image={heroImage}>
+<BaseLayout title={title} description={description} image={heroImage} width="wide">
 	<article class="project-detail">
 		{
 			heroImage && (
@@ -51,7 +51,7 @@ const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astr
 							<strong>Technologies:</strong>
 							<ul class="tags-list">
 								{tags.map((tag) => (
-									<li class="tag">{tag}</li>
+									<li class="chip">{tag}</li>
 								))}
 							</ul>
 						</div>
@@ -74,12 +74,6 @@ const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astr
 </BaseLayout>
 
 <style>
-    :global(main) {
-		width: auto;
-		max-width: 1100px;
-		margin: 0 auto;
-	}
-
 	.project-detail {
 		margin: auto;
 	}
@@ -88,28 +82,36 @@ const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astr
 		height: auto;
 		max-height: 450px;
 		object-fit: cover;
-		border-radius: 12px;
+		border-radius: var(--radius-lg);
 		margin-bottom: 2rem;
-		box-shadow: 0 5px 15px rgba(var(--shadow-color), 0.25);
+		box-shadow: var(--shadow-md);
 	}
 	.project-header {
 		text-align: center;
 		margin-bottom: 3rem;
 	}
 	.project-header h1 {
-		font-size: 3rem;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0;
+	}
+	.project-header h1::after {
+		content: '';
+		display: block;
+		width: 64px;
+		height: 4px;
+		border-radius: 2px;
+		background: var(--accent-gradient);
+		margin: 0.85rem auto 0;
 	}
 	.project-header .description {
 		font-size: 1.25rem;
-		color: var(--font-color);
-		opacity: 0.8;
-		margin: auto;
+		color: var(--muted-color);
+		max-width: 720px;
+		margin: 1rem auto 0;
 	}
 
 	/* Main content styles */
 	.prose {
-		color: rgb(var(--gray-dark));
+		color: var(--font-color);
 	}
 
 	.prose :global(h2) {
@@ -167,34 +169,18 @@ const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astr
         margin-bottom: 3rem;
 	}
 	.metadata-box {
-		background: var(--code-bg);
-		border-radius: 12px;
+		background: var(--surface);
+		border-radius: var(--radius-lg);
 		padding: 1.5rem;
-		border: 1px solid rgba(var(--shadow-color), 0.1);
+		border: 1px solid var(--border-subtle);
 	}
 	.metadata-box h3 {
 		margin-top: 0;
-		border-bottom: 1px solid rgba(var(--shadow-color), 0.2);
+		border-bottom: 1px solid var(--border-subtle);
 		padding-bottom: 0.75rem;
 	}
 	.metadata-box p {
 		margin-bottom: 1rem;
-	}
-	.status-badge {
-		font-size: 0.9rem;
-		font-weight: bold;
-		padding: 0.25rem 0.75rem;
-		border-radius: 99px;
-		color: var(--ghost-white);
-	}
-	.status-completed {
-		background-color: #1a8a3c;
-	}
-	.status-in-progress {
-		background-color: #0077b5;
-	}
-	.status-future {
-		background-color: #6a737d;
 	}
 
 	.tags-section {
@@ -207,12 +193,6 @@ const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astr
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.5rem;
-	}
-	.tag {
-		font-size: 0.85rem;
-		background-color: rgba(var(--shadow-color), 0.15);
-		padding: 0.25rem 0.75rem;
-		border-radius: 6px;
 	}
 	.github-link {
         display: block;

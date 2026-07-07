@@ -9,9 +9,11 @@ interface Props {
 	title?: string;
 	description?: string;
 	image?: ImageMetadata;
+	/** 'default' = 720px reading width, 'wide' = 1100px for image/grid-heavy pages */
+	width?: 'default' | 'wide';
 }
 
-const { title = SITE_TITLE, description = SITE_DESCRIPTION, image} = Astro.props;
+const { title = SITE_TITLE, description = SITE_DESCRIPTION, image, width = 'default' } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,7 +23,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION, image} = Astro.props
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main class:list={[{ wide: width === 'wide' }]}>
 			<slot /> </main>
 		<Footer />
 	</body>

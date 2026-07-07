@@ -8,9 +8,10 @@ import profilePic from "../assets/profile.jpg";
 <BaseLayout
     title="About Me | Edgar Reyes-Rivera"
     description="Learn more about Edgar Reyes-Rivera, a computer engineering and computer science student"
+    width="wide"
 >
     <div class="about-container">
-        <h1>About Me</h1>
+        <h1 class="section-heading">About Me</h1>
 
         <div class="profile-image">
             <Image
@@ -52,12 +53,6 @@ import profilePic from "../assets/profile.jpg";
 </BaseLayout>
 
 <style>
-    :global(main) {
-        width: auto; /* Reset the 720px default */
-        max-width: 1100px; /* A new, wider max-width */
-        margin: 0 auto;
-    }
-
     .profile-image {
         float: right; /* Makes text wrap around image */
         margin-left: 2rem;
@@ -70,6 +65,8 @@ import profilePic from "../assets/profile.jpg";
         width: 250px;
         height: 250px;
         object-fit: cover;
+        border: 3px solid var(--accent-color);
+        box-shadow: var(--shadow-md);
     }
 
     .about-container p {
