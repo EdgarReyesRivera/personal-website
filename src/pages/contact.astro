@@ -18,9 +18,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     </header>
 
     <div class="contact-links">
+      <!-- email_off/email_off comments tell Cloudflare's Email Address Obfuscation
+           to leave these alone — its decode script doesn't re-run after
+           view-transition navigations, leaving "[email protected]" and a dead
+           /cdn-cgi/ link. Wrap any future email occurrences the same way. -->
+      <!--email_off-->
       <a href="mailto:edgar@reyesrivera.dev" class="btn contact-button email">
         Email
       </a>
+      <!--/email_off-->
       <a
         href="https://www.linkedin.com/in/edgar-reyes-rivera/"
         target="_blank"
@@ -42,10 +48,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <!-- The Email button above opens a mail app; this row is for everyone
          else — copy the address, or save a vCard straight to your phone. -->
     <div class="direct-row">
+      <!--email_off-->
       <span class="email-text">edgar@reyesrivera.dev</span>
       <button type="button" class="btn btn-sm copy-email" data-email="edgar@reyesrivera.dev">
         Copy
       </button>
+      <!--/email_off-->
       <a href="/edgar-reyes-rivera.vcf" download="EdgarReyesRivera.vcf" class="btn btn-sm">
         Save my contact
       </a>

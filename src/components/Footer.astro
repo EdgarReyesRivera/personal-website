@@ -6,7 +6,10 @@ const today = new Date();
 	<div class="social-links">
 		<a href="https://github.com/EdgarReyesRivera" target="_blank" rel="noopener noreferrer">GitHub</a>
 		<a href="https://www.linkedin.com/in/edgar-reyes-rivera/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-		<a href="mailto:edgar@reyesrivera.dev">Email</a>
+		<!-- email_off/email_off comments tell Cloudflare's Email Address Obfuscation
+		     to leave this alone — its decode script doesn't re-run after view-transition
+		     navigations, leaving "[email protected]" and a dead /cdn-cgi/ link. -->
+		<!--email_off--><a href="mailto:edgar@reyesrivera.dev">Email</a><!--/email_off-->
 		</div>
 	<div class="license-info">
 		&copy; {today.getFullYear()} Edgar Reyes-Rivera. All rights reserved. <br />
