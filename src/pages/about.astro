@@ -3,6 +3,38 @@
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import profilePic from "../assets/profile.jpg";
+
+// Milestone timeline — the scannable version of the paragraphs above it.
+// Set `href` on an entry to link it (same pattern as the homepage highlights);
+// Synchrony will point at its experience page once that section is un-hidden.
+type TimelineEntry = {
+    period: string;
+    title: string;
+    detail?: string;
+    href?: string;
+};
+const timeline: TimelineEntry[] = [
+    {
+        period: "2023",
+        title: "Started at Miami University",
+        detail: "Dual major in Computer Engineering & Computer Science",
+    },
+    {
+        period: "Summer 2024",
+        title: "Software Engineer Intern, Synchrony",
+        detail: "B2B software for loan processing and private label credit cards",
+    },
+    {
+        period: "2025–26",
+        title: "President, SHPE Miami University Chapter",
+        detail: "Leading Miami's Society of Hispanic Professional Engineers",
+    },
+    {
+        period: "May 2027",
+        title: "Graduating",
+        detail: "Seeking full-time roles at the intersection of hardware and software",
+    },
+];
 ---
 
 <BaseLayout
@@ -49,6 +81,31 @@ import profilePic from "../assets/profile.jpg";
             When I'm not programming or leading, you can find me cooking or
             exploring new technical challenges.
         </p>
+
+        <section class="timeline-section">
+            <h2 class="section-heading">At a Glance</h2>
+            <ol class="timeline">
+                {
+                    timeline.map(({ period, title, detail, href }) => (
+                        <li>
+                            {href ? (
+                                <a class="timeline-entry is-link" href={href}>
+                                    <span class="timeline-period">{period}</span>
+                                    <span class="timeline-title">{title} <span class="arrow">→</span></span>
+                                    {detail && <span class="timeline-detail">{detail}</span>}
+                                </a>
+                            ) : (
+                                <div class="timeline-entry">
+                                    <span class="timeline-period">{period}</span>
+                                    <span class="timeline-title">{title}</span>
+                                    {detail && <span class="timeline-detail">{detail}</span>}
+                                </div>
+                            )}
+                        </li>
+                    ))
+                }
+            </ol>
+        </section>
     </div>
 </BaseLayout>
 
@@ -75,6 +132,75 @@ import profilePic from "../assets/profile.jpg";
 
     h1 {
         margin-bottom: 1rem;
+    }
+
+    /* Milestone timeline: thin line + dots, deliberately minimal (no icons) */
+    .timeline-section {
+        clear: both; /* Stay below the floated portrait */
+        margin-top: 3rem;
+    }
+    .timeline {
+        list-style: none;
+        margin: 0;
+        padding: 0.25rem 0;
+    }
+    .timeline li {
+        position: relative;
+        margin-left: 0.5rem;
+        padding: 0 0 1.75rem 1.6rem;
+        border-left: 2px solid var(--border-subtle);
+    }
+    .timeline li:last-child {
+        padding-bottom: 0.25rem;
+        border-left-color: transparent; /* Line ends at the last dot */
+    }
+    .timeline li::before {
+        content: '';
+        position: absolute;
+        left: -7px; /* Center the dot on the 2px line */
+        top: 0.4rem;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--accent-color);
+    }
+    .timeline-entry {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+    .timeline-period {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--accent-dark);
+    }
+    .timeline-title {
+        font-weight: 700;
+        font-size: 1.05rem;
+        line-height: 1.4;
+    }
+    .timeline-detail {
+        font-size: 0.98rem;
+        color: var(--muted-color);
+        line-height: 1.5;
+    }
+    /* Linked entries (once experience pages exist) get the highlight-card affordance */
+    a.timeline-entry {
+        text-decoration: none;
+        color: var(--font-color);
+    }
+    a.timeline-entry .arrow {
+        display: inline-block;
+        transition: transform 0.2s ease;
+    }
+    a.timeline-entry:hover .timeline-title,
+    a.timeline-entry:focus-visible .timeline-title {
+        color: var(--accent-dark);
+    }
+    a.timeline-entry:hover .arrow {
+        transform: translateX(3px);
     }
 
     /* Clear the float on small screens */

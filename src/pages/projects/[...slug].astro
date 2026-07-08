@@ -2,20 +2,36 @@
 // src/pages/projects/[...slug].astro
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import { sortProjectsByDate } from '../../utils/projects';
 
 export async function getStaticPaths() {
-	const projects = await getCollection('projects');
-	return projects.map((project) => ({
-		params: { slug: project.id },
-		props: project,
-	}));
+	// Same newest-first order as the projects index, so the prev/next links
+	// at the bottom of each write-up walk the list in the order visitors saw it.
+	const projects = sortProjectsByDate(await getCollection('projects'));
+	return projects.map((project, i) => {
+		const newer = projects[i - 1];
+		const older = projects[i + 1];
+		return {
+			params: { slug: project.id },
+			props: {
+				project,
+				newer: newer ? { id: newer.id, title: newer.data.title } : null,
+				older: older ? { id: older.id, title: older.data.title } : null,
+			},
+		};
+	});
 }
-type Props = CollectionEntry<'projects'>;
+type AdjacentProject = { id: string; title: string } | null;
+type Props = {
+	project: CollectionEntry<'projects'>;
+	newer: AdjacentProject;
+	older: AdjacentProject;
+};
 
-const project = Astro.props;
+const { project, newer, older } = Astro.props;
 const { Content } = await render(project);
 ---
 
-<ProjectLayout {...project.data}>
+<ProjectLayout {...project.data} newer={newer} older={older}>
 	<Content />
 </ProjectLayout>

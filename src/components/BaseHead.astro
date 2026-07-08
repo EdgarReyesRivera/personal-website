@@ -3,6 +3,7 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
+import { ClientRouter } from 'astro:transitions';
 import FallbackImage from '../assets/preview.png';
 import { SITE_TITLE } from '../consts';
 
@@ -34,15 +35,25 @@ const { title, description, image = FallbackImage } = Astro.props;
 />
 <meta name="generator" content={Astro.generator} />
 
-<script is:inline>
+<!-- Cross-fade between pages instead of a full reload -->
+<ClientRouter />
+
+<!-- data-astro-rerun: must re-evaluate on every soft navigation too, since this
+     injected style is the only thing that actually filters the project cards -->
+<script is:inline data-astro-rerun>
+	// Replace (never stack) any filter style from a previous navigation, so
+	// two visits with different statuses can't both apply at once.
+	document.getElementById('project-status-filter')?.remove();
+
 	// Check if we are on the projects page and a filter is active
 	const url = new URL(window.location.href);
 	if (url.pathname.startsWith('/projects') && url.searchParams.has('status')) {
 		const status = url.searchParams.get('status');
-    
+
     // Create a new <style> tag
     const style = document.createElement('style');
-    
+    style.id = 'project-status-filter';
+
     // Define the CSS rules
     // 1. Hide ALL project cards by default
     // 2. Show ONLY the cards that match the status in the URL
@@ -51,10 +62,10 @@ const { title, description, image = FallbackImage } = Astro.props;
 			display: none;
 		}
 		.project-card[data-status="${status}"] {
-			display: block; 
+			display: block;
 		}
     `;
-    
+
     // Add the new <style> tag to the <head> before the page renders
     document.head.appendChild(style);
 	}

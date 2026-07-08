@@ -5,8 +5,12 @@ import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { Image } from 'astro:assets';
 
-type Props = CollectionEntry<'projects'>['data'];
-const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astro.props;
+type AdjacentProject = { id: string; title: string } | null;
+type Props = CollectionEntry<'projects'>['data'] & {
+	newer?: AdjacentProject;
+	older?: AdjacentProject;
+};
+const { title, description, pubDate, status, heroImage, tags, githubUrl, newer = null, older = null } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} image={heroImage} width="wide">
@@ -59,7 +63,7 @@ const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astr
 				}
                 {
                     githubUrl && (
-                        <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="github-link">
+                        <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="btn github-link">
                             View on GitHub
                         </a>
                     )
@@ -70,6 +74,29 @@ const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astr
         <div class="prose">
 			<slot />
 		</div>
+
+		{
+			(older || newer) && (
+				<nav class="project-pagination" aria-label="More projects">
+					{older ? (
+						<a class="btn pagination-link is-older" href={`/projects/${older.id}/`}>
+							<span class="pagination-dir">← Older project</span>
+							<span class="pagination-title">{older.title}</span>
+						</a>
+					) : (
+						<span class="pagination-spacer" />
+					)}
+					{newer ? (
+						<a class="btn pagination-link is-newer" href={`/projects/${newer.id}/`}>
+							<span class="pagination-dir">Newer project →</span>
+							<span class="pagination-title">{newer.title}</span>
+						</a>
+					) : (
+						<span class="pagination-spacer" />
+					)}
+				</nav>
+			)
+		}
 	</article>
 </BaseLayout>
 
@@ -195,20 +222,57 @@ const { title, description, pubDate, status, heroImage, tags, githubUrl } = Astr
 		gap: 0.5rem;
 	}
 	.github-link {
-        display: block;
-        text-align: center;
-        padding: 0.75rem 1rem;
+        width: 100%;
+        box-sizing: border-box;
         margin-top: 1.5rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1rem;
-        background-color: var(--accent-color);
-        color: var(--ghost-white);
-        transition: all 0.2s ease;
     }
-    .github-link:hover {
-        background-color: var(--accent-dark);
-        transform: translateY(-2px);
-    }
+
+	/* Prev/next project links at the bottom of the write-up */
+	.project-pagination {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-top: 4rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--border-subtle);
+	}
+	.pagination-link {
+		flex-direction: column;
+		gap: 0.25rem;
+		max-width: 48%;
+		text-align: left;
+		font-size: 1rem;
+	}
+	.pagination-link.is-older {
+		align-items: flex-start;
+	}
+	.pagination-link.is-newer {
+		align-items: flex-end;
+		text-align: right;
+	}
+	.pagination-dir {
+		font-size: 0.8rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		opacity: 0.8;
+	}
+	.pagination-spacer {
+		flex: 1;
+	}
+	@media (max-width: 720px) {
+		.project-pagination {
+			flex-direction: column;
+		}
+		.pagination-link {
+			max-width: none;
+		}
+		.pagination-link.is-newer {
+			align-items: flex-start;
+			text-align: left;
+		}
+		.pagination-spacer {
+			display: none;
+		}
+	}
 </style>

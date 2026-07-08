@@ -1,0 +1,55 @@
+---
+// src/pages/404.astro — Cloudflare Pages serves dist/404.html for unknown paths.
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="Page Not Found | Edgar Reyes-Rivera"
+	description="This page doesn't exist. Head back to the homepage or explore Edgar Reyes-Rivera's projects and resume."
+>
+	<div class="not-found">
+		<header class="page-header">
+			<p class="code gradient-text" aria-hidden="true">404</p>
+			<h1>Page not found</h1>
+			<p class="subtitle">
+				The page you're looking for doesn't exist or may have moved.
+				Here's where you probably want to go:
+			</p>
+		</header>
+
+		<nav class="recovery-links">
+			<a href="/" class="btn">Home</a>
+			<a href="/projects" class="btn">Projects</a>
+			<a href="/resume" class="btn">Resume</a>
+			<a href="/contact" class="btn">Contact</a>
+		</nav>
+	</div>
+</BaseLayout>
+
+<style>
+	.not-found {
+		text-align: center;
+		padding: 2rem 0 3rem;
+	}
+	.code {
+		font-size: clamp(4rem, 12vw, 6rem);
+		font-weight: 700;
+		line-height: 1;
+		margin: 0 0 0.5rem;
+	}
+	.recovery-links {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1rem;
+	}
+
+	@media (max-width: 720px) {
+		.recovery-links {
+			flex-direction: column;
+			align-items: stretch;
+			max-width: 380px;
+			margin: 0 auto;
+		}
+	}
+</style>

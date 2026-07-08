@@ -348,6 +348,24 @@ hr {
 	background-color: var(--status-future);
 }
 
+/* Keyboard-only "skip to content" link: hidden until focused */
+.skip-link {
+	position: absolute;
+	top: -100%;
+	left: 1rem;
+	z-index: 20; /* above the sticky header (z-index 10) */
+	padding: 0.6rem 1.2rem;
+	border-radius: var(--radius-md);
+	border: 2px solid var(--accent-color);
+	background-color: var(--page-background);
+	color: var(--accent-dark);
+	font-weight: 700;
+	text-decoration: none;
+}
+.skip-link:focus {
+	top: 0.75rem;
+}
+
 .sr-only {
 	border: 0;
 	padding: 0;

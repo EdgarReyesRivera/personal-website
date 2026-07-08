@@ -1,6 +1,17 @@
 ---
 // src/pages/resume.astro
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { RESUME_UPDATED } from '../consts';
+
+// Build-time content hash of the PDF: replacing resume.pdf automatically busts
+// browser/CDN caches, no manual ?v= bump needed. Runs only at build (static site).
+const pdfHash = createHash('sha256')
+	.update(readFileSync(new URL('../../public/resume.pdf', import.meta.url)))
+	.digest('hex')
+	.slice(0, 8);
+const resumeHref = `/resume.pdf?v=${pdfHash}`;
 ---
 
 <BaseLayout
@@ -13,14 +24,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			<p class="subtitle">
 				View my most recent resume below, or grab a copy to take with you.
 			</p>
+			<p class="last-updated">Last updated: {RESUME_UPDATED}</p>
 		</header>
 
 		<div class="resume-actions">
-			<a href="/resume.pdf?v=4.0" target="_blank" rel="noopener" class="btn open-button">
+			<a href={resumeHref} target="_blank" rel="noopener" class="btn open-button">
 				Open Resume (PDF)
 			</a>
 			<a
-				href="/resume.pdf"
+				href={resumeHref}
 				download="EdgarReyesRivera_Resume.pdf"
 				class="btn"
 			>
@@ -32,7 +44,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		     since mobile browsers render PDF iframes as a blank box. -->
 		<div class="pdf-embed">
 			<iframe
-                src="/resume.pdf?v=4.0"
+                src={resumeHref}
                 title="Edgar Reyes-Rivera's Resume"
                 width="100%"
                 height="800px"
@@ -53,6 +65,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <style>
 	.resume-wrapper {
 		text-align: center;
+	}
+	.last-updated {
+		margin: 0.75rem 0 0;
+		font-size: 0.95rem;
+		color: var(--muted-color);
 	}
 	.resume-actions {
 		display: flex;

@@ -39,15 +39,25 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </a>
     </div>
 
-    <p class="email-plain">
-      Or reach me directly at
-      <a href="mailto:edgar@reyesrivera.dev">edgar@reyesrivera.dev</a>
-    </p>
+    <!-- The Email button above opens a mail app; this row is for everyone
+         else — copy the address, or save a vCard straight to your phone. -->
+    <div class="direct-row">
+      <span class="email-text">edgar@reyesrivera.dev</span>
+      <button type="button" class="btn btn-sm copy-email" data-email="edgar@reyesrivera.dev">
+        Copy
+      </button>
+      <a href="/edgar-reyes-rivera.vcf" download="EdgarReyesRivera.vcf" class="btn btn-sm">
+        Save my contact
+      </a>
+    </div>
 
     <div class="calendar-container">
       <h2>Schedule a Meeting</h2>
       <div id="my-cal-inline"></div>
-      <script type="text/javascript">
+      <!-- data-astro-rerun: view transitions give this page a fresh (empty)
+           embed div without re-running inline scripts by default; re-running
+           re-mounts the calendar (the loader itself only ever loads once). -->
+      <script type="text/javascript" data-astro-rerun>
         (function (C, A, L) {
           let p = function (a, ar) {
             a.q.push(ar);
@@ -132,10 +142,21 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
   }
 
-  .email-plain {
+  .direct-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+  }
+  .email-text {
     font-size: 1.05rem;
     color: var(--muted-color);
-    margin-bottom: 3rem;
+  }
+  /* Reserve width so the label swap to "Copied!" doesn't shift the row */
+  .copy-email {
+    min-width: 6.5rem;
   }
 
   .calendar-container {
@@ -163,3 +184,31 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
   }
 </style>
+
+<script>
+  // Copy-email button. Bound idempotently (data-bound guard) and re-run on
+  // astro:page-load so it keeps working if/when view transitions are enabled.
+  function initCopyEmail() {
+    document.querySelectorAll<HTMLButtonElement>('.copy-email').forEach((button) => {
+      if (button.dataset.bound) return;
+      button.dataset.bound = 'true';
+
+      const originalLabel = button.textContent;
+      button.addEventListener('click', async () => {
+        const email = button.dataset.email ?? '';
+        try {
+          await navigator.clipboard.writeText(email);
+          button.textContent = 'Copied!';
+        } catch {
+          // Clipboard API unavailable (old browser / insecure context)
+          button.textContent = 'Copy failed';
+        }
+        setTimeout(() => {
+          button.textContent = originalLabel;
+        }, 1800);
+      });
+    });
+  }
+  initCopyEmail();
+  document.addEventListener('astro:page-load', initCopyEmail);
+</script>

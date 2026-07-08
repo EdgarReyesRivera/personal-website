@@ -19,11 +19,12 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION, image, width = 'defa
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} image={image} />
 	</head>
 	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
 		<Header />
-		<main class:list={[{ wide: width === 'wide' }]}>
+		<main id="main" class:list={[{ wide: width === 'wide' }]}>
 			<slot /> </main>
 		<Footer />
 	</body>

@@ -424,9 +424,15 @@ const courseworkByDepartment = departments.map((department) => ({
     panel.hidden = wasHidden;
   }
 
+  // Bound per navigation: view transitions replace the DOM without re-running
+  // this module script, so re-bind on astro:page-load (the data-bound guard
+  // prevents double-binding on the initial load, where both paths run).
+  function initSkillPanels() {
   document
     .querySelectorAll<HTMLButtonElement>(".chip-clickable")
     .forEach((button) => {
+      if (button.dataset.bound) return;
+      button.dataset.bound = "true";
       button.addEventListener("click", () => {
         const panelId = button.getAttribute("aria-controls");
         const panel = panelId ? document.getElementById(panelId) : null;
@@ -449,6 +455,9 @@ const courseworkByDepartment = departments.map((department) => ({
         }
       });
     });
+  }
+  initSkillPanels();
+  document.addEventListener("astro:page-load", initSkillPanels);
 
   // Rows re-wrap when the viewport changes (e.g. phone rotation); keep any
   // open panel under its chip's row.
