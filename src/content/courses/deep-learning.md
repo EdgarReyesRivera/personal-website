@@ -9,8 +9,8 @@ department: 'Computer Science'
 # term: 'Fall 20XX'
 # TODO: Adjust to the tools/languages the course actually used.
 tags: ['Python', 'PyTorch', 'Deep Learning']
-# TODO: Uncomment if the CUDA vision pipeline ties to this course.
-# projects: ['cuda-vision-pipeline']
+# TODO: Uncomment with related project ids if any portfolio project ties to this course.
+# projects: []
 order: 7
 # Flip to true once the write-up below is finished and the section is live.
 published: false

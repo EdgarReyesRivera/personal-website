@@ -23,7 +23,7 @@ const skillCategories: { title: string; skills: Skill[] }[] = [
       { name: "C#", level: "Intermediate", tags: ["C#"] },
       { name: "CUDA", level: "Learning", tags: ["CUDA"] },
       { name: "MIPS Assembly" },
-      { name: "SQL", tags: ["SQL"] },
+      { name: "SQL", tags: ["SQL", "SQLite"] },
     ],
   },
   {
@@ -49,10 +49,23 @@ const skillCategories: { title: string; skills: Skill[] }[] = [
     ],
   },
   {
+    title: "Machine Learning & Data",
+    skills: [
+      { name: "Machine Learning", tags: ["Machine Learning", "Deep Learning"] },
+      { name: "PyTorch", tags: ["PyTorch"] },
+      { name: "scikit-learn", tags: ["scikit-learn"] },
+      { name: "Computer Vision", tags: ["Computer Vision", "Image Processing"] },
+      { name: "pandas", tags: ["pandas", "Data Pipelines"] },
+      { name: "Statistical Analysis", tags: ["Statistics", "Quantitative Research"] },
+    ],
+  },
+  {
     title: "Frameworks & Tools",
     skills: [
       { name: "React (Hooks, State Management)", tags: ["React"] },
       { name: "Firebase (Auth, Firestore)", tags: ["Firebase"] },
+      { name: "Astro", tags: ["Astro"] },
+      { name: "Tailwind CSS", tags: ["Tailwind CSS"] },
       { name: "Arduino", tags: ["Arduino"] },
       { name: "Matlab", tags: ["Matlab"] },
       { name: "Agile Methodologies" },

@@ -1,35 +1,33 @@
 ---
 title: 'Personal Portfolio Website'
-description: 'The very website you are on. A personal portfolio built with Astro to showcase my projects and resume.'
+description: 'This website — a fully static portfolio built with Astro, with type-safe content collections, a token-based design system, and automated deployment on Cloudflare.'
 status: 'In-Progress'
-pubDate: 2025-11-3
-tags: ['Astro', 'MDX', 'TypeScript', 'CSS', 'Vite']
+pubDate: 2025-11-03
+tags: ['Astro', 'TypeScript', 'CSS', 'Web Development']
 heroImage: '../../assets/preview.png'
 githubUrl: 'https://github.com/EdgarReyesRivera/personal-website'
 ---
 
-## Motivation
+## Overview
 
-This project is my personal portfolio and professional homepage. The primary goal was to create a central, high-performance website to showcase my technical projects, host my resume, and possibly share my thoughts on engineering and computer science through a technical blog.
+This site is my professional homepage: a central place to present my projects, host my resume, and let recruiters and connections see my work in one visit. It is built with Astro 5 and deployed on Cloudflare, shipping as pure static HTML with no client-side framework — every page loads fast on any device and any connection.
 
-## Core Features
+## How It's Built
 
-This website is built using **Astro** for its fast performance and "islands architecture." Key features include:
+**Content collections.** Every project write-up (including this one) is a Markdown file whose frontmatter is validated against a Zod schema at build time. Adding a project means adding one file — routes, the projects index, homepage features, and the sitemap all pick it up automatically.
 
-* **Astro Content Collections**: The site uses Astro's built-in content collections to manage blog posts and projects. This provides type-safety for all frontmatter, which is defined in `src/content.config.ts`.
-* **Dynamic Page Generation**: Project and blog post pages are dynamically generated from `.md` and `.mdx` files, allowing me to add new content simply by adding a new Markdown file.
-* **Client-Side Filtering**: The main projects page features client-side JavaScript that reads `data-status` attributes from each project card. This allows users to filter the list of projects by status ("Completed," "In-Progress," etc.) without a full page reload.
-* **Custom & Accessible Fonts**: The site uses the Atkinson Hyperlegible font, preloading the `woff2` files for performance to ensure high readability.
-* **Shared Layouts & Components**: Reusable Astro components like `<BaseLayout />`, `<Header />`, and `<Footer />` are used to maintain a consistent look and feel across the entire site.
-* **SEO & RSS**: A sitemap is automatically generated, and an `rss.xml.js` file creates an RSS feed for the blog, making it easy to subscribe to new posts.
+**A small design system.** Colors, spacing, shadows, and shared components (buttons, chips, status badges, page headers) live as CSS custom properties and classes in one global stylesheet, so every page stays visually consistent. The site follows the visitor's `prefers-color-scheme` for light and dark mode.
+
+**Build-time cross-referencing.** The skills page matches each skill against project tags when the site builds: skills backed by real work expand into a "Where I've used it" panel linking to the proof. New projects feed these panels automatically through their tags.
+
+**Client-side where it counts.** Because the output is fully static, the projects page's status filter and other interactivity run in small client scripts, written to survive Astro's view transitions so navigation stays seamless without full page reloads.
+
+**Details that matter on a phone.** My business card's QR code points at the resume page, so it is designed mobile-first — including replacing the embedded PDF viewer with direct open/download actions on small screens, where embedded PDFs are unreliable. Fonts (Atkinson Hyperlegible, chosen for readability) are self-hosted and preloaded.
+
+## Design Decisions
+
+I deliberately kept the stack minimal: no JavaScript framework, no CMS, no server. A static site is faster, cheaper, and harder to break, and Git plus Markdown is all the content workflow a portfolio needs. Pushing to the main branch triggers Cloudflare to build and deploy automatically.
 
 ## Future Work
 
-As a living project, this portfolio will be continuously updated. Future plans include:
-
-* Writing a technical blog posts, and include the blogs page access from the header.
-* Adding new projects as they are completed.
-* Potentially implementing a light/dark mode toggle instead of relying solely on the `prefers-color-scheme` media query.
-* Build a 'Skills', 'Courses Taken', and 'Achievements' page
-* Integrate a meeting scheduler onto the website
-* Update home page to create a 'Featured Work' or 'Latest Projects' section
+Sections for coursework write-ups, campus experiences, and a technical blog are already built and will go live as I finish writing their content.

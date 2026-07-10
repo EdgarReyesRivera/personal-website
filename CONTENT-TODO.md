@@ -69,7 +69,7 @@ For **every** course, the same four frontmatter TODOs plus three body sections:
 - [ ] Systems I & II
 - [ ] Database Systems
 - [ ] Comparative Programming Languages
-- [ ] Deep Learning — also uncomment `projects:` → `cuda-vision-pipeline`
+- [ ] Deep Learning
 - [ ] Image Processing
 
 ---
@@ -86,10 +86,10 @@ For **every** course, the same four frontmatter TODOs plus three body sections:
 
 - [ ] **TinyRV1 block diagram** — the write-up's own Future Work section promises
       one; it would become the project's hero image (card + OG link preview)
-- [ ] **Hero images for the other image-less projects** (5 of 7 have none; cards
-      fall back to the gradient strip, link previews to the generic site image):
-      habit-tracker (dashboard screenshot?), cuda-vision-pipeline,
-      fpga-nn-accelerator, hetero_compute_project
+- [ ] **Hero images for the other image-less projects** (cards fall back to the
+      gradient strip, link previews to the generic site image):
+      habit-tracker (dashboard screenshot?), fpga-nn-accelerator,
+      hetero_compute_project
 - [ ] **Personal-website project write-up** — worth a re-read after each site
       round so it reflects the current feature set
 - [ ] **Resume PDF** — when you replace `public/resume.pdf`, also bump
