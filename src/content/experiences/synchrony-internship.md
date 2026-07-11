@@ -4,8 +4,7 @@ title: 'Software Engineer Intern at Synchrony'
 description: 'A summer internship at Synchrony building B2B software for loan processing and private label credit cards.'
 # TODO: Set the internship start (or end) date — this controls sort order on the index.
 pubDate: 2024-08-01
-# TODO: Set the office location (city, state).
-location: 'TODO, USA'
+location: 'Remote — Cincinnati, OH'
 role: 'Software Engineer Intern'
 category: 'work'
 # Photos go in src/assets/experience_images/ — then add, e.g.:
@@ -26,7 +25,7 @@ published: false
 
 ## The Company & Role
 
-<!-- TODO: Write this section — what Synchrony does, what team you were on, and what the internship covered. -->
+<!-- TODO: Write this section — what Synchrony does, what team you were on, and what the internship covered. You were hired fully remote and worked from Cincinnati, OH (a Synchrony office was nearby, but the role was remote); you visited the Champaign, IL office during the summer — worth mentioning how remote collaboration worked. -->
 
 ## What I Worked On
 

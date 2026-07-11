@@ -25,8 +25,9 @@ Same shape for every post: resolve the frontmatter TODOs (`description`, real
 `tags`), write the three body sections, then flip `published`.
 
 **Work** (`src/content/experiences/…`)
-- [ ] `synchrony-internship.md` — Summer 2024; set the office `location`; body:
-      The Company & Role / What I Worked On / What I Took Away
+- [ ] `synchrony-internship.md` — Summer 2024, fully remote from Cincinnati
+      (visited the Champaign, IL office); body: The Company & Role /
+      What I Worked On / What I Took Away
 - [ ] `rovisys-coop.md` — May 2026–present, **ongoing**: write in present tense,
       bump `updatedDate` as it progresses; confirm `location` (Aurora, OH?)
 
