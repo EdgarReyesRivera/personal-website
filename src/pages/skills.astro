@@ -85,7 +85,8 @@ const skillCategories: { title: string; skills: Skill[] }[] = [
 
 // Match skills against project tags at build time.
 // When the Experiences section is un-hidden, add getCollection('experiences')
-// here and merge its matches (linking to /experiences/<id>/) the same way.
+// here — filtered to published entries, like courses below — and merge its
+// matches (linking to /experiences/<id>/) the same way.
 const projects = await getCollection("projects");
 const courses = await getCollection("courses");
 

@@ -5,8 +5,9 @@ description: "Speaking with alumni and faculty at Cleveland Clinic about Miami U
 # TODO: Set the actual date of the trip.
 pubDate: 2026-01-02
 location: 'Cleveland, OH'
-# TODO: Adjust to the capacity in which you attended.
+# TODO: Adjust to the capacity in which you attended (trip done with Government Relations Network members).
 role: 'Miami University Student Representative'
+category: 'representation'
 # Photos go in src/assets/experience_images/ — then add, e.g.:
 # heroImage: '../../assets/experience_images/cleveland-clinic.jpg'
 # gallery:
@@ -21,11 +22,13 @@ links:
     - label: 'Miami University and Cleveland Clinic Partnership'
       url: 'https://miamioh.edu'
 tags: ['Quantum Computing', 'Cleveland Clinic', 'Miami University']
+# Flip to true once the write-up below is finished and the section is live.
+published: false
 ---
 
 ## The Occasion
 
-<!-- TODO: Write this section — what the event was and why Miami was presenting at Cleveland Clinic. -->
+<!-- TODO: Write this section — what the event was, why Miami was presenting at Cleveland Clinic, and attending alongside Government Relations Network members. -->
 
 ## Talking Quantum
 

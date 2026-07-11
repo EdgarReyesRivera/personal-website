@@ -3,7 +3,8 @@ import { type CollectionEntry, getCollection, render } from 'astro:content';
 import ExperienceLayout from '../../layouts/ExperienceLayout.astro';
 
 export async function getStaticPaths() {
-	const experiences = await getCollection('experiences');
+	// Unpublished scaffolds never get routes (same safety layer as courses).
+	const experiences = await getCollection('experiences', ({ data }) => data.published);
 	return experiences.map((experience) => ({
 		params: { slug: experience.id },
 		props: experience,

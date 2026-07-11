@@ -53,6 +53,13 @@ const experiences = defineCollection({
 			location: z.string(),
 			// The capacity in which I represented Miami, e.g. 'SHPE Chapter President'
 			role: z.string().optional(),
+			// Groups the experiences index: internships/co-ops ('work'),
+			// conference attendance ('conference'), or representing Miami
+			// at external events ('representation').
+			category: z.enum(['work', 'conference', 'representation']).default('representation'),
+			// Only published experiences get pages and index cards;
+			// scaffolds stay false until the write-up is done (same as courses).
+			published: z.boolean().default(false),
 			heroImage: image().optional(),
 			// Extra trip photos rendered as a grid after the body
 			gallery: z

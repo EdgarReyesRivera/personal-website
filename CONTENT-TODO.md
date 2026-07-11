@@ -10,36 +10,40 @@ writing work itself. Delete items (or the whole file) as they get done.
 
 ---
 
-## 1. Experiences (2 posts — highest impact)
+## 1. Experiences (6 posts — highest impact, can go live one at a time)
 
-Unlocks: the `/experiences` section, links from the homepage highlight cards,
-and experience tags feeding the skills-page panels.
+Unlocks: the `/experiences` section, links from the homepage highlight cards
+and /about timeline, and experience tags feeding the skills-page panels.
 
-### `src/content/experiences/dc-legislative-advocacy.md` (D.C. trip)
-- [ ] Frontmatter: one-sentence `description` (shown on the card, used for SEO)
-- [ ] Frontmatter: real trip date for `pubDate` (placeholder Jan 1, 2026 currently controls sort order)
-- [ ] Frontmatter: real URL for the Miami SHPE chapter link (placeholder points at miamioh.edu)
-- [ ] Body: **Why we went** — what prompted the trip, what was at stake for higher-ed funding
-- [ ] Body: **Who we met** — the legislators/staff and what you discussed
-- [ ] Body: **Reflections** — representing Miami and SHPE in those rooms
+Every post now has `published: false` (like courses) — a finished post flips to
+`true` individually once the section is re-enabled; unfinished scaffolds can't
+leak. Posts are grouped on the index by `category` (`work` / `representation` /
+`conference`).
 
-### `src/content/experiences/cleveland-clinic-quantum.md` (Cleveland Clinic trip)
-- [ ] Frontmatter: one-sentence `description`
-- [ ] Frontmatter: real trip date for `pubDate` (placeholder Jan 2, 2026)
-- [ ] Frontmatter: your actual `role`/capacity on the trip
-- [ ] Frontmatter: real URLs — quantum-major announcement + Miami/Cleveland Clinic partnership news (placeholders)
-- [ ] Body: **What the event was** — why Miami was presenting at Cleveland Clinic
-- [ ] Body: **The conversations** — alumni/faculty, the new quantum major, the partnership
-- [ ] Body: **Reflections** — what excites you about it
+Same shape for every post: resolve the frontmatter TODOs (`description`, real
+`pubDate` — it controls sort order — placeholder link URLs, verify `role`/
+`tags`), write the three body sections, then flip `published`.
 
-### Photos (both posts)
-- [ ] Drop trip photos into `src/assets/experience_images/` and reference them in each post's `gallery` frontmatter
+**Work** (`src/content/experiences/…`)
+- [ ] `synchrony-internship.md` — Summer 2024; set the office `location`; body:
+      The Company & Role / What I Worked On / What I Took Away
+- [ ] `rovisys-coop.md` — May 2026–present, **ongoing**: write in present tense,
+      bump `updatedDate` as it progresses; confirm `location` (Aurora, OH?)
 
-### New post worth writing: Synchrony internship (Summer 2024)
-Not scaffolded yet — but the homepage "Industry Experience" highlight card and
-the new /about timeline are both built to link to it once it exists. The site
-currently says only one sentence about your strongest resume item.
-- [ ] Decide: write it as an experience post? (Say the word and the scaffold gets created.)
+**Representing Miami**
+- [ ] `dc-legislative-advocacy.md` — GRN alternate spring break (D.C. +
+      Columbus); real GRN link URLs; body: Why We Went / Who We Met / Takeaways
+- [ ] `cleveland-clinic-quantum.md` — confirm `role` (attended with GRN
+      members); real quantum-major + partnership URLs
+
+**Conferences**
+- [ ] `shpe-national-convention.md` — Anaheim; verify dates (2024 convention
+      was Oct 30–Nov 3?) and your role/officer title at the time
+- [ ] `shpe-presidents-summit.md` — Chicago, 2025; verify month
+
+### Photos (all posts)
+- [ ] Drop photos into `src/assets/experience_images/` and reference them in
+      each post's `heroImage`/`gallery` frontmatter
 
 ---
 
@@ -74,11 +78,19 @@ For **every** course, the same four frontmatter TODOs plus three body sections:
 
 ---
 
-## 3. Blog (decision needed)
+## 3. Blog (2 homelab posts scaffolded)
 
-- [ ] The only post is a placeholder ("testing"). Either write a first real post
-      and re-enable the blog (checklist in CLAUDE.md, including restoring the
-      RSS items), or decide to drop the blog section entirely.
+Decision made (July 2026): the personal Linux/homelab material becomes blog
+posts, not experience pages. Two scaffolds exist (`src/content/blog/…`):
+
+- [ ] `self-hosting-truenas-nextcloud-tailscale.md` — Why I Left OneDrive /
+      The Hardware / The Stack / Backups / What's Next
+- [ ] `daily-driving-arch-linux.md` — Why Arch / My Setup / VMs on Proxmox /
+      What I've Learned
+- [ ] Resolve each post's frontmatter TODOs (`description`, real `pubDate`)
+- [ ] Re-enable the blog once at least one post is written (checklist in
+      CLAUDE.md, including restoring the RSS items) and remove the placeholder
+      "testing" post
 
 ---
 

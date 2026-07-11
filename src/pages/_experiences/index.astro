@@ -5,9 +5,22 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 
-const experiences = (await getCollection('experiences')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+// Unpublished scaffolds never appear (same safety layer as courses).
+const experiences = (
+	await getCollection('experiences', ({ data }) => data.published)
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Group by category, recruiter-first; empty groups are omitted.
+const groups = [
+	{ category: 'work', heading: 'Work Experience' },
+	{ category: 'representation', heading: 'Representing Miami' },
+	{ category: 'conference', heading: 'Conferences' },
+]
+	.map((group) => ({
+		...group,
+		entries: experiences.filter((e) => e.data.category === group.category),
+	}))
+	.filter((group) => group.entries.length > 0);
 ---
 
 <BaseLayout
@@ -21,37 +34,51 @@ const experiences = (await getCollection('experiences')).sort(
 			campus, from advocacy trips to industry and alumni events.
 		</p>
 
-		<ul class="post-grid">
-			{
-				experiences.map((experience) => (
-					<li class="post-card">
-						<a href={`/experiences/${experience.id}/`}>
-							{experience.data.heroImage && (
-								<Image
-									width={720}
-									height={360}
-									src={experience.data.heroImage}
-									alt={`Hero image for ${experience.data.title}`}
-									class="card-image"
-								/>
-							)}
-							<div class="card-content">
-								<h3 class="title">{experience.data.title}</h3>
-								<p class="meta">
-									{experience.data.location} &middot;{' '}
-									<FormattedDate date={experience.data.pubDate} />
-								</p>
-								<p class="description">{experience.data.description}</p>
-							</div>
-						</a>
-					</li>
-				))
-			}
-		</ul>
+		{
+			groups.map((group) => (
+				<section class="experience-group">
+					<h2 class="group-heading">{group.heading}</h2>
+					<ul class="post-grid">
+						{group.entries.map((experience) => (
+							<li class="post-card">
+								<a href={`/experiences/${experience.id}/`}>
+									{experience.data.heroImage && (
+										<Image
+											width={720}
+											height={360}
+											src={experience.data.heroImage}
+											alt={`Hero image for ${experience.data.title}`}
+											class="card-image"
+										/>
+									)}
+									<div class="card-content">
+										<h3 class="title">{experience.data.title}</h3>
+										<p class="meta">
+											{experience.data.location} &middot;{' '}
+											<FormattedDate date={experience.data.pubDate} />
+										</p>
+										<p class="description">{experience.data.description}</p>
+									</div>
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			))
+		}
 	</section>
 </BaseLayout>
 
 <style>
+	.experience-group {
+		margin-top: 2.5rem;
+	}
+	.group-heading {
+		margin: 0;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid var(--border-subtle);
+	}
+
 	.post-grid {
 		display: grid;
 		grid-template-columns: 1fr; /* 1 column on mobile */
