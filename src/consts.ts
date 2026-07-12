@@ -8,7 +8,7 @@ export const SITE_NAME = 'Edgar Reyes-Rivera'
 // Shown as "Last updated" on /resume. Bump this whenever public/resume.pdf is
 // replaced (cache-busting is automatic — the page hashes the PDF at build time
 // — but this human-readable date is maintained by hand).
-export const RESUME_UPDATED = 'July 10, 2026';
+export const RESUME_UPDATED = 'July 12, 2026';
 
 // Master switch for the Coursework section. While false, the skills page
 // renders no links to /coursework/ pages (they'd 404 — the pages dir is the
