@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://reyesrivera.dev/sitemap-index.xml
+Sitemap: https://reyesrivera.com/sitemap-index.xml
