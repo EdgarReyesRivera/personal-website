@@ -105,7 +105,7 @@ posts, not experience pages. Two scaffolds exist (`src/content/blog/…`):
       hetero_compute_project
 - [ ] **Personal-website project write-up** — worth a re-read after each site
       round so it reflects the current feature set
-- [ ] **Resume PDF** — when you replace `public/resume.pdf`, also bump
+- [ ] **Resume PDF** — when you replace `public/Edgar_Reyes-Rivera_Resume.pdf`, also bump
       `RESUME_UPDATED` in `src/consts.ts` (the visible "Last updated" date;
       cache-busting itself is automatic now)
 

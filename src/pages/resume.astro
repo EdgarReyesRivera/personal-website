@@ -5,13 +5,13 @@ import { readFileSync } from 'node:fs';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { RESUME_UPDATED } from '../consts';
 
-// Build-time content hash of the PDF: replacing resume.pdf automatically busts
+// Build-time content hash of the PDF: replacing the resume PDF automatically busts
 // browser/CDN caches, no manual ?v= bump needed. Runs only at build (static site).
 const pdfHash = createHash('sha256')
-	.update(readFileSync(new URL('../../public/resume.pdf', import.meta.url)))
+	.update(readFileSync(new URL('../../public/Edgar_Reyes-Rivera_Resume.pdf', import.meta.url)))
 	.digest('hex')
 	.slice(0, 8);
-const resumeHref = `/resume.pdf?v=${pdfHash}`;
+const resumeHref = `/Edgar_Reyes-Rivera_Resume.pdf?v=${pdfHash}`;
 ---
 
 <BaseLayout
@@ -33,7 +33,7 @@ const resumeHref = `/resume.pdf?v=${pdfHash}`;
 			</a>
 			<a
 				href={resumeHref}
-				download="EdgarReyesRivera_Resume.pdf"
+				download="Edgar_Reyes-Rivera_Resume.pdf"
 				class="btn"
 			>
 				Download a Copy
