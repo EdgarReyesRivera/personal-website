@@ -5,52 +5,99 @@ import { readFileSync } from 'node:fs';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { RESUME_UPDATED } from '../consts';
 
-// Build-time content hash of the PDF: replacing the resume PDF automatically busts
+// Build-time content hash of each PDF: replacing a PDF automatically busts
 // browser/CDN caches, no manual ?v= bump needed. Runs only at build (static site).
-const pdfHash = createHash('sha256')
-	.update(readFileSync(new URL('../../public/Edgar_Reyes-Rivera_Resume.pdf', import.meta.url)))
-	.digest('hex')
-	.slice(0, 8);
-const resumeHref = `/Edgar_Reyes-Rivera_Resume.pdf?v=${pdfHash}`;
+function hashedHref(file: string) {
+	const hash = createHash('sha256')
+		.update(readFileSync(new URL(`../../public/${file}`, import.meta.url)))
+		.digest('hex')
+		.slice(0, 8);
+	return `/${file}?v=${hash}`;
+}
+
+// Both versions are phone-free builds from ~/Github/Resumes (`make website`,
+// `make website-software`). The first entry is the default — it's what the
+// business-card QR code lands on. `/resume?version=software` deep-links the other.
+const versions = [
+	{
+		id: 'general',
+		label: 'General',
+		blurb: 'Hardware + software',
+		href: hashedHref('Edgar_Reyes-Rivera_Resume.pdf'),
+		download: 'Edgar_Reyes-Rivera_Resume.pdf',
+	},
+	{
+		id: 'software',
+		label: 'Software',
+		blurb: 'Software engineering',
+		href: hashedHref('Edgar_Reyes-Rivera_Software_Resume.pdf'),
+		download: 'Edgar_Reyes-Rivera_Software_Resume.pdf',
+	},
+];
 ---
 
 <BaseLayout
 	title="Resume | Edgar Reyes-Rivera"
-	description="View and download the resume for Edgar Reyes-Rivera."
+	description="View and download the resumes of Edgar Reyes-Rivera — general (hardware + software) and software engineering versions."
 >
 	<div class="resume-wrapper">
 		<header class="page-header">
 			<h1>My Resume</h1>
 			<p class="subtitle">
-				View my most recent resume below, or grab a copy to take with you.
+				Two versions, depending on the role. View one below, or grab a copy to take with you.
 			</p>
 			<p class="last-updated">Last updated: {RESUME_UPDATED}</p>
 		</header>
 
-		<div class="resume-actions">
-			<a href={resumeHref} target="_blank" rel="noopener" class="btn open-button">
-				Open Resume (PDF)
-			</a>
-			<a
-				href={resumeHref}
-				download="Edgar_Reyes-Rivera_Resume.pdf"
-				class="btn"
-			>
-				Download a Copy
-			</a>
+		<div class="version-picker" role="tablist" aria-label="Resume version">
+			{versions.map((v, i) => (
+				<button
+					type="button"
+					role="tab"
+					id={`tab-${v.id}`}
+					class="version-tab"
+					aria-selected={i === 0 ? 'true' : 'false'}
+					aria-controls={`panel-${v.id}`}
+					data-version={v.id}
+				>
+					<span class="version-label">{v.label}</span>
+					<span class="version-blurb">{v.blurb}</span>
+				</button>
+			))}
 		</div>
 
-		<!-- Inline preview for larger screens; phones get the buttons above,
-		     since mobile browsers render PDF iframes as a blank box. -->
-		<div class="pdf-embed">
-			<iframe
-                src={resumeHref}
-                title="Edgar Reyes-Rivera's Resume"
-                width="100%"
-                height="800px"
-            >
-            </iframe>
-		</div>
+		{versions.map((v, i) => (
+			<section
+				class="resume-panel"
+				id={`panel-${v.id}`}
+				role="tabpanel"
+				aria-labelledby={`tab-${v.id}`}
+				data-version={v.id}
+				hidden={i !== 0}
+			>
+				<div class="resume-actions">
+					<a href={v.href} target="_blank" rel="noopener" class="btn">
+						Open {v.label} Resume (PDF)
+					</a>
+					<a href={v.href} download={v.download} class="btn">
+						Download a Copy
+					</a>
+				</div>
+
+				<!-- Inline preview for larger screens; phones get the buttons above,
+				     since mobile browsers render PDF iframes as a blank box. -->
+				<div class="pdf-embed">
+					<iframe
+						src={v.href}
+						title={`Edgar Reyes-Rivera's ${v.label} Resume`}
+						width="100%"
+						height="800px"
+						loading="lazy"
+					>
+					</iframe>
+				</div>
+			</section>
+		))}
 
 		<aside class="explore-strip">
 			<p>Want the full story behind the bullet points?</p>
@@ -62,6 +109,44 @@ const resumeHref = `/Edgar_Reyes-Rivera_Resume.pdf?v=${pdfHash}`;
 	</div>
 </BaseLayout>
 
+<script>
+	// Resume version tabs. Bound idempotently (data-bound guard) and re-run on
+	// astro:page-load, since view transitions run module scripts once per visit.
+	function initResumeTabs() {
+		const tabs = document.querySelectorAll<HTMLButtonElement>('.version-tab');
+		const panels = document.querySelectorAll<HTMLElement>('.resume-panel');
+		if (!tabs.length) return;
+
+		function select(id: string, updateUrl: boolean) {
+			tabs.forEach((tab) => {
+				tab.setAttribute('aria-selected', String(tab.dataset.version === id));
+			});
+			panels.forEach((panel) => {
+				panel.hidden = panel.dataset.version !== id;
+			});
+			if (updateUrl) {
+				// Keep the address bar shareable, e.g. /resume?version=software
+				const url = new URL(window.location.href);
+				if (id === tabs[0].dataset.version) url.searchParams.delete('version');
+				else url.searchParams.set('version', id);
+				history.replaceState(history.state, '', url);
+			}
+		}
+
+		const requested = new URLSearchParams(window.location.search).get('version');
+		const known = Array.from(tabs).some((tab) => tab.dataset.version === requested);
+		select(known && requested ? requested : tabs[0].dataset.version!, false);
+
+		tabs.forEach((tab) => {
+			if (tab.dataset.bound) return;
+			tab.dataset.bound = 'true';
+			tab.addEventListener('click', () => select(tab.dataset.version!, true));
+		});
+	}
+	initResumeTabs();
+	document.addEventListener('astro:page-load', initResumeTabs);
+</script>
+
 <style>
 	.resume-wrapper {
 		text-align: center;
@@ -71,6 +156,51 @@ const resumeHref = `/Edgar_Reyes-Rivera_Resume.pdf?v=${pdfHash}`;
 		font-size: 0.95rem;
 		color: var(--muted-color);
 	}
+
+	.version-picker {
+		display: inline-flex;
+		gap: 0.25rem;
+		padding: 0.25rem;
+		margin-bottom: 1.5rem;
+		background-color: var(--surface);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-lg);
+	}
+	.version-tab {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.1rem;
+		min-width: 11rem;
+		padding: 0.6rem 1.25rem;
+		font: inherit;
+		color: var(--muted-color);
+		background: transparent;
+		border: 2px solid transparent;
+		border-radius: var(--radius-md);
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent; /* the selected border is the tap feedback */
+		transition: color 0.2s ease, border-color 0.2s ease;
+	}
+	.version-tab:hover {
+		color: var(--accent-dark);
+	}
+	.version-tab[aria-selected='true'] {
+		color: var(--accent-dark);
+		border-color: var(--accent-color);
+	}
+	.version-tab:focus-visible {
+		outline: 2px solid var(--accent-color);
+		outline-offset: 2px;
+	}
+	.version-label {
+		font-weight: 700;
+		font-size: 1.05rem;
+	}
+	.version-blurb {
+		font-size: 0.85rem;
+	}
+
 	.resume-actions {
 		display: flex;
 		flex-wrap: wrap;
@@ -114,6 +244,16 @@ const resumeHref = `/Edgar_Reyes-Rivera_Resume.pdf?v=${pdfHash}`;
 		   and let the buttons open it in the native full-screen viewer. */
 		.pdf-embed {
 			display: none;
+		}
+		.version-picker {
+			display: flex;
+			max-width: 380px;
+			margin: 0 auto 1.25rem;
+		}
+		.version-tab {
+			flex: 1;
+			min-width: 0;
+			padding: 0.55rem 0.5rem;
 		}
 		.resume-actions {
 			flex-direction: column;
