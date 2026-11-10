@@ -186,8 +186,59 @@ textarea {
 input {
 	font-size: 16px;
 }
+/* Markdown tables: bordered card with a tinted header row and row dividers.
+   The bottom margin keeps the next heading from butting up against it. */
 table {
 	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	margin: 1.5rem 0 2.5rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	border: 1px solid var(--border-subtle);
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+}
+th,
+td {
+	padding: 0.75rem 1rem;
+	text-align: left;
+	vertical-align: top;
+}
+thead th {
+	background-color: var(--surface);
+	color: var(--accent-dark);
+	font-weight: 700;
+	font-size: 0.85rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	border-bottom: 2px solid var(--accent-color);
+}
+tbody tr + tr td {
+	border-top: 1px solid var(--border-subtle);
+}
+/* A row whose first cell is blank continues the group above it (e.g. more
+   sessions on the same day), so only rows that start a new group get the
+   stronger divider. */
+tbody tr + tr:has(> td:first-child:not(:empty)) td {
+	border-top: 2px solid var(--border-subtle);
+}
+/* First column = row label (e.g. the day); keep it on one line */
+tbody td:first-child {
+	font-weight: 700;
+	white-space: nowrap;
+}
+@media (max-width: 720px) {
+	table {
+		font-size: 0.9rem;
+	}
+	th,
+	td {
+		padding: 0.6rem 0.7rem;
+	}
+	tbody td:first-child {
+		white-space: normal;
+	}
 }
 img {
 	max-width: 100%;

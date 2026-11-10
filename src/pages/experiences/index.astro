@@ -26,13 +26,16 @@ const groups = [
 <BaseLayout
 	title="Experiences | Edgar Reyes-Rivera"
 	description="Experiences representing Miami University, from legislative advocacy to industry partnerships."
+	width="wide"
 >
 	<section>
-		<h1>Experiences</h1>
-		<p>
-			Moments where I've had the chance to represent Miami University beyond
-			campus, from advocacy trips to industry and alumni events.
-		</p>
+		<header class="page-header">
+			<h1>Experiences</h1>
+			<p class="subtitle">
+				Moments where I've had the chance to represent Miami University beyond
+				campus, from advocacy trips to industry and alumni events.
+			</p>
+		</header>
 
 		{
 			groups.map((group) => (
@@ -70,8 +73,8 @@ const groups = [
 </BaseLayout>
 
 <style>
-	.experience-group {
-		margin-top: 2.5rem;
+	.experience-group + .experience-group {
+		margin-top: 3rem;
 	}
 	.group-heading {
 		margin: 0;
@@ -94,34 +97,44 @@ const groups = [
 			grid-template-columns: repeat(2, 1fr);
 		}
 	}
+	/* 3 columns on wide screens, same as the projects grid */
+	@media (min-width: 1024px) {
+		.post-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
 
 	.post-card {
-		background-color: var(--code-bg);
-		border-radius: 12px;
+		background-color: var(--surface);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-lg);
 		overflow: hidden;
-		box-shadow: 0 4px 12px rgba(var(--shadow-color), 0.1);
+		box-shadow: var(--shadow-sm);
 		transition: all 0.2s ease-in-out;
 	}
 	.post-card:hover {
 		transform: translateY(-5px);
-		box-shadow: 0 8px 20px rgba(var(--shadow-color), 0.2);
+		box-shadow: var(--shadow-lg);
 	}
 	.post-card a {
 		text-decoration: none;
 		color: var(--font-color);
 		display: block;
+		height: 100%;
+		box-sizing: border-box;
 	}
 	.card-image {
 		width: 100%;
 		height: 200px;
 		object-fit: cover;
-		border-bottom: 1px solid rgba(var(--shadow-color), 0.1);
+		border-radius: 0;
+		border-bottom: 1px solid var(--border-subtle);
 	}
 	.card-content {
 		padding: 1.5rem;
 	}
 	.card-content .title {
-		font-size: 1.5rem;
+		font-size: 1.35rem;
 		margin: 0 0 0.5rem 0;
 		color: var(--accent-dark);
 	}

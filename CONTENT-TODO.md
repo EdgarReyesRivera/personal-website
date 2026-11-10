@@ -10,14 +10,14 @@ writing work itself. Delete items (or the whole file) as they get done.
 
 ---
 
-## 1. Experiences (6 posts — highest impact, can go live one at a time)
+## 1. Experiences (6 posts left — highest impact, can go live one at a time)
 
-Unlocks: the `/experiences` section, links from the homepage highlight cards
+The `/experiences` section is **live** (Nov 2026) with the SHPE 2026
+Indianapolis post. Still to unlock: links from the homepage highlight cards
 and /about timeline, and experience tags feeding the skills-page panels.
 
-Every post now has `published: false` (like courses) — a finished post flips to
-`true` individually once the section is re-enabled; unfinished scaffolds can't
-leak. Posts are grouped on the index by `category` (`work` / `representation` /
+Unfinished posts have `published: false` (like courses) — flip a post to
+`true` once its write-up is done; unfinished scaffolds can't leak. Posts are grouped on the index by `category` (`work` / `representation` /
 `conference`).
 
 Same shape for every post: resolve the frontmatter TODOs (`description`, real
@@ -38,7 +38,10 @@ Same shape for every post: resolve the frontmatter TODOs (`description`, real
       members); real quantum-major + partnership URLs
 
 **Conferences**
-- [ ] `shpe-national-convention.md` — Anaheim; verify dates (2024 convention
+- [x] `shpe-national-convention-2026.md` — Indianapolis; published Nov 2026.
+      Follow-up: link the Kiroween 2026 project when done (due Dec 4), and link
+      the Presidents Summit / RoviSys pages from it once those are published
+- [ ] `shpe-national-convention-2024.md` — Anaheim; verify dates (2024 convention
       was Oct 30–Nov 3?) and your role/officer title at the time
 - [ ] `shpe-presidents-summit.md` — Chicago, 2025; verify month
 
