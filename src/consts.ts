@@ -9,7 +9,7 @@ export const SITE_NAME = 'Edgar Reyes-Rivera'
 // or public/Edgar_Reyes-Rivera_Software_Resume.pdf is replaced (cache-busting is
 // automatic — the page hashes each PDF at build time — but this human-readable
 // date is maintained by hand).
-export const RESUME_UPDATED = 'October 30, 2026';
+export const RESUME_UPDATED = 'November 23, 2026';
 
 // Master switch for the Coursework section. While false, the skills page
 // renders no links to /coursework/ pages (they'd 404 — the pages dir is the
